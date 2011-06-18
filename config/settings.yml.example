@@ -1,0 +1,20 @@
+defaults: &defaults
+  host: 'http://example.org'
+  mailer:
+    enable: true
+    address: 'mail.example.org'
+    port: 25
+    domain: 'example.org'
+    authentication: 'plain'
+    user: 'foobar'
+    password: 'notme'
+    starttls_auto: true
+
+development:
+  <<: *defaults
+
+production:
+  <<: *defaults
+
+test:
+  <<: *defaults

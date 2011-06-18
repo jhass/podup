@@ -1,0 +1,22 @@
+common: &common
+  adapter: mysql2
+  host: "localhost" 
+  port: 3306
+#  socket: /tmp/mysql.sock
+  username: "root"
+  password: "password"
+  charset: utf8
+  collation: utf8_bin
+
+
+development:
+  <<: *common
+  database: podup_development
+
+production:
+  <<: *common
+  database: podup_production
+
+test:
+  <<: *common
+  database: podup_test

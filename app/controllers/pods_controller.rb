@@ -1,0 +1,2 @@
+class PodsController < ApplicationController
+end
