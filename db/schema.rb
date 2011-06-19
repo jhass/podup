@@ -10,7 +10,31 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110618231031) do
+ActiveRecord::Schema.define(:version => 20110619152259) do
+
+  create_table "locations", :force => true do |t|
+    t.string   "code"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "pods", :force => true do |t|
+    t.string   "name"
+    t.integer  "owner_id"
+    t.integer  "location_id"
+    t.string   "url"
+    t.string   "version"
+    t.datetime "updated"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "statuses", :force => true do |t|
+    t.integer  "pod_id"
+    t.boolean  "up",         :default => false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "users", :force => true do |t|
     t.string   "email",                                 :default => "", :null => false
@@ -25,6 +49,9 @@ ActiveRecord::Schema.define(:version => 20110618231031) do
     t.string   "last_sign_in_ip"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "name"
+    t.string   "website"
+    t.string   "public_email"
   end
 
   add_index "users", ["email"], :name => "index_users_on_email", :unique => true
