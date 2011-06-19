@@ -1,0 +1,10 @@
+%tr
+  %td= "##{pod_counter+1}"
+  %td= pod.name
+  %td= pod.owner.name
+  %td= pod.reliability
+  %td
+    = image_tag pod.location.flag_path
+    = pod.location.name
+  %td= pod.score
+  %td= pod.stars
