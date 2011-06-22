@@ -29,3 +29,5 @@
   - travis build
   - BDD (?)
 - Provide something in the user model that always puts something out that is usable as name
+- Pod removal
+- Automatic hide from list

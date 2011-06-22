@@ -19,13 +19,13 @@ class PodsController < ApplicationController
   
   def create
     success = false
-    if params[:pod].blank? or params[:pod][:name].blank? or params[:pod][:url].blank? or params[:pod][:location].blank?
+    unless needed_params_present?
       flash[:error] = "All fields are required"
     else
       if uri = URI.parse(params[:pod][:url])
-        if Pod.where(:name => params[:pod][:name]).first
+        if Pod.where(:name => params[:pod][:name]).exists?
           flash[:error] = "Name already used"
-        elsif Pod.where(:url => params[:pod][:url]).first
+        elsif Pod.where(:url => params[:pod][:url]).exists?
           flash[:error] = "Pod already submitted"
         elsif location = Location.where(:code => params[:pod][:location].downcase).first
           #TODO: resque job
@@ -44,6 +44,30 @@ class PodsController < ApplicationController
     redirect_to success ? pods_path : new_user_pod_path
   end
   
+  def update
+    unless needed_params_present?
+      flash[:error] = "All fields are required"
+    else
+      if uri = URI.parse(params[:pod][:url]) and pod = Pod.find(params[:id])
+        if params[:pod][:name] != pod.name and Pod.where(:name => params[:pod][:name]).exists?
+          flash[:error] = "Name already submitted"
+        elsif params[:pod][:url] != pod.url and Pod.where(:url => params[:pod][:url]).exists?
+          flash[:error] = "There's another pod with that URL submitted"
+        elsif location = Location.where(:code => params[:pod][:location].downcase).first
+          #TODO: resque job
+          pod.update_attributes(params[:pod].merge(:location => location))
+          flash[:notice] = "You'll be notified when the changes are accepted"
+        else
+          flash[:error] = "The given location is invalid"
+        end
+      else
+        flash[:error] = "The given URL is invalid or there were another problem"
+      end
+    end
+    
+    redirect_to :back
+  end
+  
   def switch_maintenance
     if @pod = Pod.find(params[:pod_id]) and current_user.owns?(@pod)
       if @pod.maintenance?
@@ -60,5 +84,14 @@ class PodsController < ApplicationController
     end
     
     redirect_to success ? :back : :index
+  end
+  
+  private
+  def needed_params_present?
+    if params[:pod].blank? or params[:pod][:name].blank? or params[:pod][:url].blank? or params[:pod][:location].blank?
+      false
+    else
+      true
+    end
   end
 end

@@ -27,4 +27,6 @@
     = f.text_field :name
     = f.label :url, "URL"
     = f.text_field :url
+    = f.label :location, "Country"
+    = f.country_select :location, @pod.location.name
     = f.submit "Update"
