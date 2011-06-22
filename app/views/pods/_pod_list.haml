@@ -2,9 +2,10 @@
   %tr
     %th #
     %th Name
-    %th Owner
+    - unless skip_owner
+      %th Owner
     %th Reliability
     %th Country
     %th Score
     %th Stars
-  = render pods
+  = render pods, :skip_owner => skip_owner
