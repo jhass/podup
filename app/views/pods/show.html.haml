@@ -16,6 +16,9 @@
   %li
     Reliability:
     = @pod.reliability
+  %li
+    Maintenained by
+    = link_to @pod.owner.name, public_user_path(@pod.owner)
 
 - if user_signed_in? and current_user.owns?(@pod)
   %h3 Edit pod
