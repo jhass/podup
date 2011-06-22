@@ -4,7 +4,6 @@
 
 %h3 Edit details
 = form_for current_user, :url => user_path do |f|
-  = #f.error_messages
   = f.label :name, "Display name"
   = f.text_field :name
   = f.label :email, "Email"
@@ -14,7 +13,6 @@
 
 %h3 Change password
 = form_for 'user', :url => user_path, :html => { :method => :put } do |f|
-  = #f.error_messages
   = f.label :current_password, "Current password"
   = f.password_field :current_password
   = f.label :password, "New password"

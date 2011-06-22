@@ -20,9 +20,9 @@
       %li= link_to "Pods", pods_path
       - if user_signed_in?
         %li= link_to "Edit account", edit_user_path
-        %li= link_to "Submit new pod", new_user_pod_path
+        %li= link_to "Submit new pod", new_pod_path
         - if current_user.pods.any?
-          %li= link_to "Edit pods", user_pods_path
+          %li= link_to "Edit pods", own_pods_path
         %li= link_to "Sign out", destroy_user_session_path
       - else
         %li= link_to "Sign in", user_session_path
