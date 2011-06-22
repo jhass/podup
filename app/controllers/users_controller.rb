@@ -24,6 +24,16 @@ class UsersController < ApplicationController
         changes = true
       end
     end
+    if params[:user][:public_email]
+      unless params[:user][:public_email].blank? or
+             params[:user][:public_email].start_with?("http") or 
+             params[:user][:public_email].start_with?("mailto")
+        params[:user][:public_email] = "mailto:#{params[:user][:public_email]}"
+      end
+      if current_user.update_attributes(:public_email => params[:user][:public_email])
+        changes = true
+      end
+    end
     
     if changes
       flash[:notice] = "Account details updated successfully"

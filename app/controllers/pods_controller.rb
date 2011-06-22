@@ -7,7 +7,6 @@ class PodsController < ApplicationController
   
   def own
     @pods = current_user.pods.order('score DESC')
-    render :index
   end
   
   def show

@@ -1,0 +1,4 @@
+- content_for :page_title do
+  Your pods
+
+= render 'pod_list', :pods => @pods, :skip_owner => true

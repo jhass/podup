@@ -2,8 +2,6 @@
   - Design
   - Ajaxy stuff
     - Preselect country on user/pod ip
-  - User page
-    - Sane way to contact a user -> use the public email field in the DB
 - Ranking system
   - score
   - reliability

@@ -4,10 +4,12 @@
 
 %h3 Edit details
 = form_for current_user, :url => user_path do |f|
-  = f.label :name, "Display name"
+  = f.label :name, "Display name (optional)"
   = f.text_field :name
   = f.label :email, "Email"
   = f.text_field :email
+  = f.label :public_email, "Public email/URL to contact page (optional)"
+  = f.text_field :public_email
   = link_to 'Cancel', edit_user_path
   = f.submit "Update"
 

@@ -1,7 +1,10 @@
 - content_for :page_title do
   = @user.name
 
-%h3= "Pods by #{@user.name}"
+%h2= @user.name
 %ul
-  %li= link_to 'Contact user', '#'
+  - if @user.contactable?
+    %li= link_to 'Contact user', @user.public_email
+
+%h3= "Pods by this user"
 = render 'pods/pod_list', :pods => @pods, :skip_owner => true
