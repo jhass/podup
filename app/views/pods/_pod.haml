@@ -2,9 +2,13 @@
   %td= "##{pod_counter+1}"
   %td= link_to pod.name, pod
   %td= link_to pod.owner.name, public_user_path(pod.owner)
-  %td= "#{pod.reliability.round(2)}%"
+  %td
+    = "#{pod.reliability}%"
+    - if pod.maintenance?
+      Maintenance since
+      = time_ago_in_words(pod.maintenance)
   %td
     = image_tag pod.location.flag_path
     = pod.location.name
-  %td= pod.score.round(3)
+  %td= pod.score
   %td= stars(pod.stars)

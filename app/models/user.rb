@@ -6,4 +6,7 @@ class User < ActiveRecord::Base
   
   attr_accessible :email, :password, :password_confirmation, :remember_me, :name
 
+  def owns?(pod)
+    Pod.where(:owner_id => self, :id => pod).exists?
+  end
 end

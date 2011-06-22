@@ -1,0 +1,29 @@
+- content_for :page_title do
+  = @pod.name
+
+%h3
+  = link_to @pod.name, @pod.url
+  = "(#{stars(@pod.stars)})".html_safe
+%ul
+  - if @pod.maintenance?
+    %li#maintenance_notice 
+      Pod is in maintenance mode since
+      = time_ago_in_words(@pod.maintenance)
+  %li
+    Score:
+    = @pod.score
+  %li
+    Reliability:
+    = @pod.reliability
+
+- if user_signed_in? and current_user.owns?(@pod)
+  %h3 Edit pod
+  = link_to "#{@pod.maintenance? ? 'Disable' : 'Enable'} maintenance mode", pod_switch_maintenance_path(@pod)
+  %p Want to do it automatically? Just do a GET request at: TODO
+  
+  = form_for @pod do |f|
+    = f.label :name, "Name"
+    = f.text_field :name
+    = f.label :url, "URL"
+    = f.text_field :url
+    = f.submit "Update"

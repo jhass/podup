@@ -3,6 +3,7 @@ Podup::Application.routes.draw do
     collection do
       get :own
     end
+    get :switch_maintenance
   end
   
   match 'users/edit' => redirect('/user/edit')

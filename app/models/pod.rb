@@ -5,7 +5,7 @@ class Pod < ActiveRecord::Base
   
   validates_presence_of :name, :url, :location, :owner
   
-  attr_accessible :name, :score, :url, :location, :owner
+  attr_accessible :name, :score, :url, :location, :owner, :maintenance
 
   def reliability
     100.0
@@ -17,5 +17,21 @@ class Pod < ActiveRecord::Base
   
   def score
     100.123
+  end
+  
+  def maintenance?
+    if self.maintenance and self.maintenance < Time.now and self.maintenance != Time.at(0)
+      true
+    else
+      false
+    end
+  end
+
+  def enable_maintenance
+    self.update_attributes(:maintenance => Time.now)
+  end
+  
+  def disable_maintenance
+    self.update_attributes(:maintenance => nil)
   end
 end

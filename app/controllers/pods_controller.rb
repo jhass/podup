@@ -10,6 +10,13 @@ class PodsController < ApplicationController
     render :index
   end
   
+  def show
+    unless @pod = Pod.find(params[:id])
+      flash[:error] = "No such pod"
+      redirect_to :index
+    end
+  end
+  
   def create
     success = false
     if params[:pod].blank? or params[:pod][:name].blank? or params[:pod][:url].blank? or params[:pod][:location].blank?
@@ -35,5 +42,23 @@ class PodsController < ApplicationController
     end
     
     redirect_to success ? pods_path : new_user_pod_path
+  end
+  
+  def switch_maintenance
+    if @pod = Pod.find(params[:pod_id]) and current_user.owns?(@pod)
+      if @pod.maintenance?
+        @pod.disable_maintenance
+        flash[:notice] = "Maintenance mode disabled"
+      else
+        @pod.enable_maintenance
+        flash[:notice] = "Maintenance mode enabled"
+      end
+      success = true
+    else
+      flash[:error] = "No such pod or not allowed"
+      success = false
+    end
+    
+    redirect_to success ? :back : :index
   end
 end
