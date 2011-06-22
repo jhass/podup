@@ -1,0 +1,25 @@
+- content_for :page_title do
+  Edit user details
+
+
+%h3 Edit details
+= form_for current_user, :url => user_path do |f|
+  = #f.error_messages
+  = f.label :name, "Display name"
+  = f.text_field :name
+  = f.label :email, "Email"
+  = f.text_field :email
+  = link_to 'Cancel', edit_user_path
+  = f.submit "Update"
+
+%h3 Change password
+= form_for 'user', :url => user_path, :html => { :method => :put } do |f|
+  = #f.error_messages
+  = f.label :current_password, "Current password"
+  = f.password_field :current_password
+  = f.label :password, "New password"
+  = f.password_field :password
+  = f.label :password_confirmation, "Confirm password"
+  = f.password_field :password_confirmation
+  = link_to 'Cancel', edit_user_path
+  = f.submit "Change password"

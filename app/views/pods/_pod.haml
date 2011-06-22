@@ -1,10 +1,10 @@
 %tr
   %td= "##{pod_counter+1}"
-  %td= pod.name
-  %td= pod.owner.name
-  %td= pod.reliability
+  %td= link_to pod.name, pod
+  %td= link_to pod.owner.name, pod.owner
+  %td= "#{pod.reliability.round(2)}%"
   %td
     = image_tag pod.location.flag_path
     = pod.location.name
-  %td= pod.score
-  %td= pod.stars
+  %td= pod.score.round(3)
+  %td= stars(pod.stars)
