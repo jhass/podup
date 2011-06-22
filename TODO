@@ -1,0 +1,31 @@
+- Frontend
+  - Design
+  - Ajaxy stuff
+    - Preselect country on user/pod ip
+  - User page
+    - Sane way to contact a user -> use the public email field in the DB
+- Ranking system
+  - score
+  - reliability
+  - stars
+  - maintenance mode
+  - uptime
+- Background processing
+  - Notifiers
+  - Checks
+  - Create
+- mini API
+- moar validation
+  - case insensive checks
+  - pod
+    - on creation
+    - on update
+    - in the model
+  - user
+    - on creation
+    - on update
+    - in the model
+- some specs for everything
+  - travis build
+  - BDD (?)
+- Provide something in the user model that always puts something out that is usable as name

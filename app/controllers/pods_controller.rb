@@ -6,7 +6,7 @@ class PodsController < ApplicationController
   end
   
   def own
-    @pods = Pod.where(:owner_id => current_user).order('score DESC')
+    @pods = current_user.pods.order('score DESC')
     render :index
   end
   

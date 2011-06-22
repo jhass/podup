@@ -9,6 +9,7 @@
     %li#maintenance_notice 
       Pod is in maintenance mode since
       = time_ago_in_words(@pod.maintenance)
+  %li= location(@pod)
   %li
     Score:
     = @pod.score

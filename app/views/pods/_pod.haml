@@ -7,8 +7,6 @@
     - if pod.maintenance?
       Maintenance since
       = time_ago_in_words(pod.maintenance)
-  %td
-    = image_tag pod.location.flag_path
-    = pod.location.name
+  %td= location(pod)
   %td= pod.score
   %td= stars(pod.stars)

@@ -7,8 +7,8 @@ Podup::Application.routes.draw do
   end
   
   match 'users/edit' => redirect('/user/edit')
-  resources :users, :only => [:show], :as => 'public_user'
   devise_for :users, :controllers => { :registrations => "registrations"}
+  resources :users, :only => [:show], :as => 'public_user'
   resource :user, :only => [:edit, :update, :destroy]
   
   root :to => "pods#index"

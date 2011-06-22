@@ -1,5 +1,15 @@
 class UsersController < ApplicationController
   before_filter :authenticate_user!, :only => [:edit, :update, :destroy]
+  
+  def show
+    unless @user = User.find(params[:id])
+      flash[:error] = "No such user"
+      redirect_to root_path
+    else
+      @pods = @user.pods.order('score DESC')
+    end
+  end
+  
   def update
     changes = false
     params[:user] = {} unless params[:user]

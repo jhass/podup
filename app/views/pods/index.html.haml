@@ -1,13 +1,4 @@
 - content_for :page_title do
   List
 
-%table
-  %tr
-    %th #
-    %th Name
-    %th Owner
-    %th Reliability
-    %th Country
-    %th Score
-    %th Stars
-  = render @pods
+= render 'pod_list', :pods => @pods

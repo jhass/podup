@@ -1,0 +1,7 @@
+- content_for :page_title do
+  = @user.name
+
+%h3= "Pods by #{@user.name}"
+%ul
+  %li= link_to 'Contact user', '#'
+= render 'pods/pod_list', :pods => @pods
