@@ -1,6 +1,6 @@
 class Pod < ActiveRecord::Base
   belongs_to :owner, :class_name => 'User', :foreign_key => :owner_id
-  has_many :statuses
+  has_many :states
   belongs_to :location
   
   validates_presence_of :name, :url, :location, :owner

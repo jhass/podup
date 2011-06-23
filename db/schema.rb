@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110623121813) do
+ActiveRecord::Schema.define(:version => 20110623125311) do
 
   create_table "locations", :force => true do |t|
     t.string   "code"
@@ -36,7 +36,7 @@ ActiveRecord::Schema.define(:version => 20110623121813) do
     t.boolean  "accepted",    :default => false
   end
 
-  create_table "statuses", :force => true do |t|
+  create_table "states", :force => true do |t|
     t.integer  "pod_id"
     t.boolean  "up",         :default => false
     t.datetime "created_at"
