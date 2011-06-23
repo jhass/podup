@@ -6,7 +6,7 @@ class UsersController < ApplicationController
       flash[:error] = "No such user"
       redirect_to root_path
     else
-      @pods = @user.pods.order('score DESC')
+      @pods = @user.pods.accepted.active.order('score DESC')
     end
   end
   

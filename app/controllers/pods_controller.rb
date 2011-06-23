@@ -2,7 +2,7 @@ require 'uri'
 class PodsController < ApplicationController
   before_filter :authenticate_user!, :except => [:index, :show]
   def index
-    @pods = Pod.order('score DESC')
+    @pods = Pod.accepted.active.order('score DESC')
   end
   
   def own

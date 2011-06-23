@@ -5,7 +5,10 @@ class Pod < ActiveRecord::Base
   
   validates_presence_of :name, :url, :location, :owner
   
-  attr_accessible :name, :score, :url, :location, :owner, :maintenance
+  attr_accessible :name, :score, :url, :location, :owner, :maintenance, :accepted
+  
+  scope :accepted, where(:accepted => true)
+  scope :active, where('maintenance != NULL AND maintenance != ? AND maintenance < ?', Time.at(0), Time.now-Settings[:inactive])
 
   def reliability
     100.0
@@ -25,6 +28,10 @@ class Pod < ActiveRecord::Base
     else
       false
     end
+  end
+
+  def accepted?
+    self.accepted
   end
 
   def enable_maintenance

@@ -11,3 +11,5 @@
   %td= location(pod)
   %td= pod.score
   %td= stars(pod.stars)
+  - if display_acceptation_state
+    %td= acceptance_state(pod.accepted?)

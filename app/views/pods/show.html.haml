@@ -9,6 +9,10 @@
     %li#maintenance_notice 
       Pod is in maintenance mode since
       = time_ago_in_words(@pod.maintenance)
+  - unless @pod.accepted?
+    %li#acceptance_notice
+      = image_tag 'icons/not_accepted.png'
+      The pod isn't accepted yet
   %li= location(@pod)
   %li
     Score:

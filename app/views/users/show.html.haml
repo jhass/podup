@@ -7,4 +7,4 @@
     %li= link_to 'Contact user', @user.public_email
 
 %h3= "Pods by this user"
-= render 'pods/pod_list', :pods => @pods, :skip_owner => true
+= render 'pods/pod_list', :pods => @pods, :skip_owner => true, :display_acceptation_state => false

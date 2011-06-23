@@ -8,4 +8,6 @@
     %th Country
     %th Score
     %th Stars
-  = render pods, :skip_owner => skip_owner
+    - if display_acceptation_state
+      %th Accepted
+  = render pods, :skip_owner => skip_owner, :display_acceptation_state => display_acceptation_state

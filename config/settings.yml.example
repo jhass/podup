@@ -1,5 +1,7 @@
 defaults: &defaults
   host: 'http://example.org'
+  # The time in seconds after that a pod in maintenance is marked as inactive (default one week, 604800)
+  inactive: 604800
   mailer:
     enable: true
     address: 'mail.example.org'
