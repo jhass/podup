@@ -27,7 +27,6 @@ class PodsController < ApplicationController
         elsif Pod.where(:url => params[:pod][:url]).exists?
           flash[:error] = "Pod already submitted"
         elsif location = Location.where(:code => params[:pod][:location].downcase).first
-          #TODO: resque job
           Pod.create!(:name => params[:pod][:name], :url => uri.to_s, :location => location,
                       :owner => current_user)
           flash[:notice] = "You'll be notified when your pod is accepted"

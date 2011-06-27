@@ -9,6 +9,9 @@ gem 'nokogiri'
 gem 'haml-rails'
 gem 'jquery-rails'
 
+# http action
+gem 'mechanize'
+
 # location
 gem 'geoip'
 gem 'countries'

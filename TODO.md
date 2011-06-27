@@ -5,15 +5,9 @@
   - Ajaxy stuff
     - Preselect country on user/pod ip
 - Ranking system
-  - score
-  - reliability
-  - stars
-  - maintenance mode
   - uptime
 - Background processing
   - Notifiers
-  - Checks
-  - Create
 - mini API
 - moar validation
   - case insensive checks
@@ -31,3 +25,4 @@
 - Provide something in the user model that always puts something out that is usable as name
 - Pod removal
 - Automatic hide from list
+- Logging
