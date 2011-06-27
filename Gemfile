@@ -7,6 +7,7 @@ gem 'mysql2', '0.2.6'
 gem 'thin'
 gem 'nokogiri'
 gem 'haml-rails'
+gem 'sass'
 gem 'jquery-rails'
 
 # http action

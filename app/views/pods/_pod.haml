@@ -6,8 +6,9 @@
   %td
     = "#{pod.reliability}%"
     - if pod.maintenance?
-      Maintenance since
-      = time_ago_in_words(pod.maintenance)
+      %span#maintenance_notice_list
+        Maintenance since
+        = time_ago_in_words(pod.maintenance)
   %td= location(pod)
   %td= pod.score
   %td= stars(pod.stars)

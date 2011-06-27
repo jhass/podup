@@ -14,7 +14,7 @@ class Pod < ActiveRecord::Base
   after_create :enqueue_approval!
   
   scope :accepted, where(:accepted => true)
-  scope :active, where('pods.maintenance IS NULL OR pods.maintenance = ? OR pods.maintenance < ?', Time.at(0), Time.now-Settings[:inactive])
+  scope :active, where('pods.maintenance IS NULL OR pods.maintenance = ? OR pods.maintenance > ?', Time.at(0), Time.now-Settings[:inactive])
   
   def is_modern?
     return false if self.version == 'n/a'
