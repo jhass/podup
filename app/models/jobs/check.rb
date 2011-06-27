@@ -4,7 +4,7 @@ module Job
     
     def self.perform(pod_id)
       pod = Pod.find(pod_id)
-      pod.is_up? unless pod.maintenance?
+      pod.is_up?
       pod.compute_reliability!
       pod.compute_score!
       pod.enqueue!

@@ -23,6 +23,12 @@ class Pod < ActiveRecord::Base
   end
   
   def is_up?(save_state=true)
+    if self.maintenance?
+      if save_state
+        State.create!(:up => false, :maintenance => true, :pod_id => self.id)
+      end
+      return false
+    end
     up = site ? true : false
     if save_state
       State.create!(:up => up, :pod_id => self.id)
@@ -66,7 +72,7 @@ class Pod < ActiveRecord::Base
   
   def compute_reliability!
     if self.states.count > 0
-      reliability = (self.states.up.count/self.states.count)*100
+      reliability = (self.states.up.count.to_f/self.states.count.to_f)*100
     else
       reliability = 0.0
     end
@@ -85,7 +91,8 @@ class Pod < ActiveRecord::Base
   
   def compute_score!
     if self.states.count > 0
-      score = ((self.states.up.count*10 + self.states.down.count*5)/self.states.count)+100
+      score = ((self.states.up.count.to_f*10 + self.states.down.count.to_f*5)/self.states.count.to_f)+100
+      score += ((self.states.count.to_f-self.states.maintenance.count.to_f)/self.states.count.to_f)+5
     else
       score = 70
     end

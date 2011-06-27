@@ -4,10 +4,17 @@
   - Design
   - Ajaxy stuff
     - Preselect country on user/pod ip
+  - Filter by country
+  - Top 3
+  - Random pod
 - Ranking system
-  - uptime
+  - Uptime
+  - Pod#verify_diaspora_pod!
 - Background processing
   - Notifiers
+  - Mechanize improvements
+    - Timeout
+    - User agent
 - mini API
 - moar validation
   - case insensive checks
@@ -24,5 +31,4 @@
   - BDD (?)
 - Provide something in the user model that always puts something out that is usable as name
 - Pod removal
-- Automatic hide from list
 - Logging
