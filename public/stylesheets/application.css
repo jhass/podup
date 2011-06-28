@@ -1,3 +1,9 @@
 #maintenance_notice_list {
   display: block;
-  font-size: 0.8em; }
+  font-sizec: 0.8em; }
+
+.state_up {
+  color: green; }
+
+.state_down {
+  color: red; }

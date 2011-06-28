@@ -1,8 +1,6 @@
 require 'uri'
-require File.join(Rails.root, 'lib', 'mechanize_helper')
 
 class Pod < ActiveRecord::Base
-  include MechanizeHelper
   belongs_to :owner, :class_name => 'User', :foreign_key => :owner_id
   has_many :states
   belongs_to :location
@@ -81,6 +79,7 @@ class Pod < ActiveRecord::Base
   
   def stars
     case self.reliability
+      when nil then 0
       when 0..40 then 1
       when 40..60 then 2
       when 60..80 then 3
@@ -131,8 +130,9 @@ class Pod < ActiveRecord::Base
   private
   def site
     begin
-      @site ||= mechanize.get(self.uri+'/users/sign_in')
-    rescue
+      @site ||= Faraday.get(self.uri+'/users/sign_in')
+    rescue Exception => e
+      puts e
       #TODO log
       false
     end

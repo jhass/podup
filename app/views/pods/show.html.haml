@@ -16,15 +16,22 @@
   %li= location_for(@pod)
   %li
     Score:
-    = @pod.score
+    = @pod.score.round(3)
   %li
     Reliability:
-    = @pod.reliability
+    = "#{@pod.reliability.round(2)}%"
   %li
     Maintenained by
     = link_to @pod.owner.name, public_user_path(@pod.owner)
 
+%h3 Last 5 checks
+%ul.checks
+  = render @states
+
 - if user_signed_in? and current_user.owns?(@pod)
+  - content_for :head do
+    = javascript_include_tag 'country_detect.js'
+    
   %h3 Edit pod
   = link_to "#{@pod.maintenance? ? 'Disable' : 'Enable'} maintenance mode", pod_switch_maintenance_path(@pod)
   %p Want to do it automatically? Just do a GET request at: TODO

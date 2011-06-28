@@ -3,9 +3,10 @@
 - Frontend
   - Design
   - Ajaxy stuff
-    - Preselect country on user/pod ip
+    - Preselect country on user ip
     - Auto refresh list (?)
   - Top 3
+  - Top countries
   - Random pod
   - Pod removal
 - Ranking system
@@ -31,3 +32,4 @@
   - travis build
   - BDD (?)
 - Logging
+- Fix get_code_for route

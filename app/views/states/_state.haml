@@ -1,0 +1,10 @@
+%li{ :class => state.up? ? 'state_up' : 'state_down'}
+  - if state.up?
+    = image_tag 'icons/online.png'
+    Online
+  - else
+    = image_tag 'icons/offline.png'
+    Offline
+  \-
+  = time_ago_in_words(state.created_at)
+  ago

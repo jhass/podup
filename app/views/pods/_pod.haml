@@ -4,14 +4,14 @@
   -unless skip_owner
     %td= link_to pod.owner.name, public_user_path(pod.owner)
   %td
-    = "#{pod.reliability}%"
+    = "#{pod.reliability.round(2)}%"
     - if pod.maintenance?
       %span#maintenance_notice_list
         Maintenance since
         = time_ago_in_words(pod.maintenance)
   - unless skip_country
     %td= location_for(pod)
-  %td= pod.score
+  %td= pod.score.round(3)
   %td= stars(pod.stars)
   - unless skip_acceptation_state
     %td= acceptance_state(pod.accepted?)

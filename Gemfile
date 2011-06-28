@@ -11,7 +11,8 @@ gem 'sass'
 gem 'jquery-rails'
 
 # http action
-gem 'mechanize'
+gem 'faraday'
+gem 'faraday-stack'
 
 # location
 gem 'geoip'

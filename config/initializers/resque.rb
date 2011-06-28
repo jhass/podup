@@ -4,7 +4,7 @@ require 'resque'
 require 'resque_scheduler'
 
 Resque.reset_delayed_queue
-
+r
 Pod.accepted.each do |pod|
   pod.enqueue!
 end

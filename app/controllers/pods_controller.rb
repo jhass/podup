@@ -14,6 +14,7 @@ class PodsController < ApplicationController
       flash[:error] = "No such pod"
       redirect_to :index
     end
+    @states = @pod.states.where(:maintenance => false).order('id DESC').limit(5)
   end
   
   def create
