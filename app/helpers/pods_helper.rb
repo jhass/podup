@@ -1,9 +1,14 @@
 module PodsHelper
-  def location(pod)
+  def location_for(object)
+    if object.is_a?(Pod)
+      location = object.location
+    else
+      location = object
+    end
     r = ""
-    r += image_tag pod.location.flag_path
+    r += image_tag location.flag_path
     r += " "
-    r += pod.location.name
-    r.html_safe
+    r += location.name
+    link_to(r.html_safe, country_path(location))
   end
 end

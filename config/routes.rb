@@ -6,10 +6,13 @@ Podup::Application.routes.draw do
     get :switch_maintenance
   end
   
+  resources :countries, :only => [:index, :show]
+  
   match 'users/edit' => redirect('/user/edit')
   devise_for :users, :controllers => { :registrations => "registrations"}
   resources :users, :only => [:show], :as => 'public_user'
   resource :user, :only => [:edit, :update, :destroy]
+  
   
   root :to => "pods#index"
 end

@@ -13,7 +13,7 @@
     %li#acceptance_notice
       = image_tag 'icons/not_accepted.png'
       The pod isn't accepted yet
-  %li= location(@pod)
+  %li= location_for(@pod)
   %li
     Score:
     = @pod.score

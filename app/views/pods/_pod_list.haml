@@ -1,3 +1,6 @@
+- skip_owner ||= false
+- skip_acceptation_state ||= true
+- skip_country ||= false
 %table
   %tr
     %th #
@@ -5,9 +8,10 @@
     - unless skip_owner
       %th Owner
     %th Reliability
-    %th Country
+    - unless skip_country
+      %th Country
     %th Score
     %th Stars
-    - if display_acceptation_state
+    - unless skip_acceptation_state
       %th Accepted
-  = render pods, :skip_owner => skip_owner, :display_acceptation_state => display_acceptation_state
+  = render pods, :skip_owner => skip_owner, :skip_acceptation_state => skip_acceptation_state, :skip_country => skip_country

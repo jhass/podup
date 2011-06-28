@@ -4,7 +4,7 @@
   - Design
   - Ajaxy stuff
     - Preselect country on user/pod ip
-  - Filter by country
+    - Auto refresh list (?)
   - Top 3
   - Random pod
   - Pod removal

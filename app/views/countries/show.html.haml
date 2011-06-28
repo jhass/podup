@@ -1,0 +1,6 @@
+- content_for :page_title do
+  = "Pods for #{@location.name}"
+
+%h3= "Pods for #{@location.name}"
+
+= render 'pods/pod_list', :pods => @pods, :skip_country => true

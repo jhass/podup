@@ -18,6 +18,7 @@
         = content_tag :div, msg, :id => "flash_#{name}"
     %ul#nav
       %li= link_to "Pods", pods_path
+      %li= link_to "Countries", countries_path
       - if user_signed_in?
         %li= link_to "Edit account", edit_user_path
         %li= link_to "Submit new pod", new_pod_path

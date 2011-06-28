@@ -1,0 +1,8 @@
+- content_for :page_title do
+  Countries
+
+%h3 Countries
+
+%ul
+  - @locations.each do |loc|
+    %li= location_for(loc)
