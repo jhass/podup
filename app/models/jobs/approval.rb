@@ -11,7 +11,6 @@ module Job
         pod.enqueue!
         #TODO send mail
       else
-        pod.update_attributes
         #TODO send mail
       end
     end
