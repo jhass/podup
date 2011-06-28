@@ -7,6 +7,7 @@
   - Filter by country
   - Top 3
   - Random pod
+  - Pod removal
 - Ranking system
   - Uptime
   - Pod#verify_diaspora_pod!
@@ -29,6 +30,4 @@
 - some specs for everything
   - travis build
   - BDD (?)
-- Provide something in the user model that always puts something out that is usable as name
-- Pod removal
 - Logging
