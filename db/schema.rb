@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110627233616) do
+ActiveRecord::Schema.define(:version => 20110629203904) do
 
   create_table "locations", :force => true do |t|
     t.string   "code"
@@ -35,6 +35,7 @@ ActiveRecord::Schema.define(:version => 20110627233616) do
     t.datetime "maintenance"
     t.boolean  "accepted",    :default => false
     t.float    "reliability"
+    t.datetime "upsince"
   end
 
   create_table "states", :force => true do |t|

@@ -8,6 +8,7 @@ module Job
         pod.update_attributes(:accepted => true)
         pod.compute_reliability!
         pod.compute_score!
+        pod.compute_uptime!
         pod.enqueue!
         #TODO send mail
       else

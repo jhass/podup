@@ -13,5 +13,6 @@
     %td= location_for(pod)
   %td= pod.score.round(3)
   %td= stars(pod.stars)
+  %td= uptime(pod.upsince)
   - unless skip_acceptation_state
     %td= acceptance_state(pod.accepted?)

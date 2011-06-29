@@ -10,12 +10,10 @@
   - Random pod
   - Pod removal
 - Ranking system
-  - Uptime
   - Pod#verify_diaspora_pod!
 - Background processing
   - Notifiers
-  - Mechanize improvements
-    - Timeout
+  - Faraday improvements
     - User agent
 - mini API
 - moar validation

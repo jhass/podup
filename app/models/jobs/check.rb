@@ -7,6 +7,7 @@ module Job
       pod.is_up?
       pod.compute_reliability!
       pod.compute_score!
+      pod.compute_uptime!
       pod.enqueue!
     end
   end

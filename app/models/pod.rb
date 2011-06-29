@@ -7,7 +7,8 @@ class Pod < ActiveRecord::Base
   
   validates_presence_of :name, :url, :location, :owner
   
-  attr_accessible :name, :score, :url, :location, :owner, :maintenance, :accepted, :version, :updated, :reliability
+  attr_accessible :name, :score, :url, :location, :owner, :maintenance, 
+                  :accepted, :version, :updated, :reliability, :upsince
   
   after_create :enqueue_approval!
   
@@ -68,15 +69,6 @@ class Pod < ActiveRecord::Base
     updated
   end
   
-  def compute_reliability!
-    if self.states.count > 0
-      reliability = (self.states.up.count.to_f/self.states.count.to_f)*100
-    else
-      reliability = 0.0
-    end
-    self.update_attributes(:reliability => reliability)
-  end
-  
   def stars
     case self.reliability
       when nil then 0
@@ -88,15 +80,45 @@ class Pod < ActiveRecord::Base
     end
   end
   
+  def compute_reliability!
+    if self.states.count > 0
+      reliability = (self.states.up.count.to_f/self.states.count.to_f)*100
+    else
+      reliability = 0.0
+    end
+    self.update_attributes(:reliability => reliability)
+  end
+  
+  
   def compute_score!
     if self.states.count > 0
-      score = ((self.states.up.count.to_f*10 + self.states.down.count.to_f*5)/self.states.count.to_f)+100
+      score = ((self.states.up.count.to_f*10 + self.states.down.count.to_f*5)/self.states.count.to_f)+85
       score += ((self.states.count.to_f-self.states.maintenance.count.to_f)/self.states.count.to_f)+5
     else
       score = 70
     end
     score -= 10.0 unless self.is_modern?
+    unless self.upsince
+      score -= 10
+    else
+      uptime = Time.now-self.upsince
+      score += uptime/(60*60*24*7)
+    end
     self.update_attributes(:score => score)
+  end
+  
+  def compute_uptime!
+    if down = self.states.down.order("id DESC").limit(1).first
+      oldest_up = self.states.up.where("id > ?", down.id).order("id ASC").limit(1).first
+    else
+      oldest_up = self.states.up.order("id ASC").limit(1).first
+    end
+    
+    if oldest_up
+      self.update_attributes(:upsince =>  oldest_up.created_at)
+    else
+      self.update_attributes(:upsince => nil)
+    end
   end
   
   def maintenance?

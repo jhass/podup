@@ -20,6 +20,7 @@
   %li
     Reliability:
     = "#{@pod.reliability.round(2)}%"
+  %li= uptime(@pod.upsince)
   %li
     Maintenained by
     = link_to @pod.owner.name, public_user_path(@pod.owner)

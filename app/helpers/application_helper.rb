@@ -15,4 +15,14 @@ module ApplicationHelper
     end
     r.html_safe
   end
+  
+  def uptime(time_or_nil)
+    r = "Up since "
+    if time_or_nil
+      r += time_ago_in_words(time_or_nil)
+    else
+      r += "never"
+    end
+    r
+  end
 end
