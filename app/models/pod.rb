@@ -55,7 +55,8 @@ class Pod < ActiveRecord::Base
   def stars
     case self.reliability
       when nil then 0
-      when 0..40 then 1
+      when 0 then 0
+      when 1..40 then 1
       when 40..60 then 2
       when 60..80 then 3
       when 80..95 then 4
@@ -63,6 +64,13 @@ class Pod < ActiveRecord::Base
     end
   end
   
+  def reliability
+    self[:reliability] || 0.0
+  end
+  
+  def score
+    self[:score] || 0.0
+  end
   
   # Checks
   
