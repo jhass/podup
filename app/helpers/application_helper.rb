@@ -1,8 +1,11 @@
 module ApplicationHelper
-  def stars(n)
+  def stars(n, total=5)
     r = ""
     n.times do
       r += image_tag "icons/star.png"
+    end
+    (total-n).times do
+      r += image_tag "icons/star_inactive.png"
     end
     r.html_safe
   end
