@@ -15,25 +15,8 @@ class Pod < ActiveRecord::Base
   scope :accepted, where(:accepted => true)
   scope :active, where('pods.maintenance IS NULL OR pods.maintenance = ? OR pods.maintenance > ?', Time.at(0), Time.now-Settings[:inactive])
   
-  def is_modern?
-    return false if self.version == 'n/a'
-    return false if self.updated == Time.at(0)
-    return true
-  end
   
-  def is_up?(save_state=true)
-    if self.maintenance?
-      if save_state
-        State.create!(:up => false, :maintenance => true, :pod_id => self.id)
-      end
-      return false
-    end
-    up = site ? true : false
-    if save_state
-      State.create!(:up => up, :pod_id => self.id)
-    end
-    up
-  end
+  #Atributes
   
   def uri
     @uri ||= URI.parse(self.url)
@@ -80,6 +63,44 @@ class Pod < ActiveRecord::Base
     end
   end
   
+  
+  # Checks
+  
+  def is_modern?
+    return false if self.version == 'n/a'
+    return false if self.updated == Time.at(0)
+    return true
+  end
+  
+  def is_up?(save_state=true)
+    if self.maintenance?
+      if save_state
+        State.create!(:up => false, :maintenance => true, :pod_id => self.id)
+      end
+      return false
+    end
+    up = site ? true : false
+    if save_state
+      State.create!(:up => up, :pod_id => self.id)
+    end
+    up
+  end
+  
+  def maintenance?
+    if self.maintenance and self.maintenance < Time.now and self.maintenance != Time.at(0)
+      true
+    else
+      false
+    end
+  end
+  
+  def accepted?
+    self.accepted
+  end
+  
+  
+  # Stats
+  
   def compute_reliability!
     if self.states.count > 0
       reliability = (self.states.up.count.to_f/self.states.count.to_f)*100
@@ -121,18 +142,9 @@ class Pod < ActiveRecord::Base
     end
   end
   
-  def maintenance?
-    if self.maintenance and self.maintenance < Time.now and self.maintenance != Time.at(0)
-      true
-    else
-      false
-    end
-  end
-
-  def accepted?
-    self.accepted
-  end
-
+  
+  # Actions
+  
   def enable_maintenance
     self.update_attributes(:maintenance => Time.now)
   end
@@ -150,6 +162,10 @@ class Pod < ActiveRecord::Base
   end
   
   private
+  
+  
+  # Helper
+  
   def site
     begin
       @site ||= Faraday.get(self.uri+'/users/sign_in')
