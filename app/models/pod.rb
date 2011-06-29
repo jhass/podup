@@ -92,7 +92,7 @@ class Pod < ActiveRecord::Base
   
   def compute_score!
     if self.states.count > 0
-      score = ((self.states.up.count.to_f*10 + self.states.down.count.to_f*5)/self.states.count.to_f)+85
+      score = ((self.states.up.count.to_f*90 + self.states.down.count.to_f*20)/self.states.count.to_f)
       score += ((self.states.count.to_f-self.states.maintenance.count.to_f)/self.states.count.to_f)+5
     else
       score = 70
