@@ -3,8 +3,8 @@
 - Frontend
   - Design
   - Ajaxy stuff
-    - Preselect country on user ip
-    - Auto refresh list (?)
+    * Preselect country on user ip
+    * Auto refresh list (?)
   - Top 3
   - Top countries
   - Random pod
@@ -14,20 +14,20 @@
 - Background processing
   - Notifiers
   - Faraday improvements
-    - User agent
+    * User agent
 - mini API
 - moar validation
   - case insensive checks
   - pod
-    - on creation
-    - on update
-    - in the model
+    * on creation
+    * on update
+    * in the model
   - user
-    - on creation
-    - on update
-    - in the model
+    * on creation
+    * on update
+    * in the model
 - some specs for everything
-  - travis build
-  - BDD (?)
+  * travis build
+  * BDD (?)
 - Logging
 - Fix get_code_for route
