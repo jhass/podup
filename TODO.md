@@ -1,33 +1,45 @@
 ## ToDo
 
-- Frontend
-  - Design
-  - Ajaxy stuff
-    * Preselect country on user ip
-    * Auto refresh list (?)
-  - Top 3
-  - Top countries
-  - Random pod
-  - Pod removal
-- Ranking system
-  - Pod#verify_diaspora_pod!
-- Background processing
-  - Notifiers
-  - Faraday improvements
-    * User agent
-- mini API
-- moar validation
-  - case insensive checks
-  - pod
-    * on creation
-    * on update
-    * in the model
-  - user
-    * on creation
-    * on update
-    * in the model
-- some specs for everything
-  * travis build
-  * BDD (?)
+### Frontend
+
+- Design
+- Ajaxy stuff
+  - Preselect country on user ip
+  - Auto refresh list (?)
+- Top 3
+- Top countries
+- Random pod
+- Pod removal
+
+### Ranking system
+
+- Pod#verify_diaspora_pod!
+
+### Background processing
+
+- Notifiers
+- Faraday improvements
+  - User agent
+
+### mini API
+
+### moar validation
+
+- case insensive checks
+- pod
+  - on creation
+  - on update
+  - in the model
+- user
+  - on creation
+  - on update
+  - in the model
+
+### some specs for everything
+
+- travis build
+  - BDD (?)
 - Logging
-- Fix get_code_for route
+
+
+### Fix get_code_for route
