@@ -16,15 +16,18 @@ FactoryGirl.define do
       sequence(:name) {|n| "Accepted pod #{n}" }
       url { "http://#{name.downcase.gsub(' ', '_')}.pods.example.org" }
       accepted true
-    
+      
       factory :active_pod do
       end
-    
+      
       factory :inactive_pod do
         sequence(:name) {|n| "Inactive pod #{n}" }
         url { "http://#{name.downcase.gsub(' ', '_')}.pods.example.org" }
         maintenance Time.at(1)
       end
+    end
+    
+    factory :unaccepted_pod do
     end
   end
 end
