@@ -70,21 +70,27 @@ class PodsController < ApplicationController
   end
   
   def switch_maintenance
-    if @pod = Pod.find(params[:pod_id]) and current_user.owns?(@pod)
-      if @pod.maintenance?
-        @pod.disable_maintenance
-        flash[:notice] = "Maintenance mode disabled"
+    begin
+      @pod = Pod.find(params[:pod_id])
+      if current_user.owns?(@pod)
+        if @pod.maintenance?
+          @pod.disable_maintenance
+          flash[:notice] = "Maintenance mode disabled"
+        else
+          @pod.enable_maintenance
+          flash[:notice] = "Maintenance mode enabled"
+        end
+        success = true
       else
-        @pod.enable_maintenance
-        flash[:notice] = "Maintenance mode enabled"
+        flash[:error] = "Not allowed"
+        success = false
       end
-      success = true
-    else
-      flash[:error] = "No such pod or not allowed"
+    rescue ActiveRecord::RecordNotFound
+      flash[:error] = "Pod not found"
       success = false
     end
     
-    redirect_to success ? :back : :index
+    redirect_to success ? pod_path(@pod) : pods_path
   end
   
   private

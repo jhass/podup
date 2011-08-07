@@ -1,19 +1,19 @@
 require 'spec_helper'
 
 describe PodsController do
+  let(:user) { Factory :user }
   
   describe "#index" do
-    context 'user is logged out'do
+    context 'with logged out user'do
       it 'succeeds' do
         get :index
         response.should be_success
       end
     end
     
-    context 'user is logged in' do
+    context 'with logged in user' do
       before do
-        @user = Factory :user
-        sign_in :user, @user
+        sign_in :user, user
       end
       
       it 'succeeds' do
@@ -66,7 +66,7 @@ describe PodsController do
   end
   
   describe '#own' do
-    context 'user is logged out' do
+    context 'with logged out user' do
       it 'redirects to the sign in page' do
         get :own
         
@@ -74,10 +74,9 @@ describe PodsController do
       end
     end
     
-    context 'user is logged in' do
+    context 'with logged in user' do
       before do
-        @user = Factory :user
-        sign_in :user, @user
+        sign_in :user, user
       end
       
       it 'succeeds' do
@@ -87,7 +86,7 @@ describe PodsController do
       end
       
       it 'shows the current users accepted pods' do
-        accepted_pod = Factory :accepted_pod, :owner => @user
+        accepted_pod = Factory :accepted_pod, :owner => user
         
         get :own
         
@@ -95,7 +94,7 @@ describe PodsController do
       end
       
       it 'shows the current users unaccepted pods' do
-        unaccepted_pod = Factory :unaccepted_pod, :owner => @user
+        unaccepted_pod = Factory :unaccepted_pod, :owner => user
         
         get :own
         
@@ -103,7 +102,7 @@ describe PodsController do
       end
       
       it 'shows the current users active pods' do
-        active_pod = Factory :active_pod, :owner => @user
+        active_pod = Factory :active_pod, :owner => user
         
         get :own
         
@@ -111,7 +110,7 @@ describe PodsController do
       end
       
       it 'shows the current users inactive pods' do
-        inactive_pod = Factory :inactive_pod, :owner => @user
+        inactive_pod = Factory :inactive_pod, :owner => user
         
         get :own
         
@@ -127,9 +126,9 @@ describe PodsController do
       end
       
       it 'orders the pods descending by score' do
-        pods = [Factory(:pod, :score => 100.1, :owner => @user),
-                Factory(:pod, :score => 90.5, :owner => @user),
-                Factory(:pod, :score => 80.32, :owner => @user)]
+        pods = [Factory(:pod, :score => 100.1, :owner => user),
+                Factory(:pod, :score => 90.5, :owner => user),
+                Factory(:pod, :score => 80.32, :owner => user)]
         
         get :own
         
@@ -174,8 +173,7 @@ describe PodsController do
       
       context 'user is logged in' do
         before do
-          @user = Factory :user
-          sign_in :user, @user
+          sign_in :user, user
         end
         
         it 'succeeds' do
@@ -212,6 +210,106 @@ describe PodsController do
           get :show, :id => @pod.id
           
           assigns(:states).include?(state).should be_false
+        end
+      end
+    end
+  end
+  
+  describe '#switch_maintenance' do
+    let(:pod) { Factory :pod }
+    
+    context 'with logged out user' do
+      it 'redirects to the user sign in page' do
+        get :switch_maintenance, :pod_id => pod.id
+        
+        response.should redirect_to user_session_path
+      end
+    end
+    
+    context 'with logged in user' do
+      let(:user) { Factory :user }
+      before do
+        sign_in :user, user
+      end
+      
+      context 'with an existing pod' do
+        context 'with an pod owned by the current user' do
+          before do
+            @pod = Factory :pod, :owner => user
+          end
+          
+          context 'with enabled maintenance mode' do
+            before do
+              @pod.enable_maintenance
+            end
+            
+            it 'should turn the maintenance mode off' do
+              get :switch_maintenance, :pod_id => @pod.id
+              
+              
+              @pod.reload.maintenance?.should be_false
+            end
+          end
+        
+          context 'with disabled maintenance mode' do
+            before do
+              @pod.disable_maintenance
+            end
+            
+            it 'should turn the maintenance mode on' do
+              get :switch_maintenance, :pod_id => @pod.id
+              
+              @pod.reload.maintenance?.should be_true
+            end
+          end
+          
+          it 'should notify the user about its actions' do
+            get :switch_maintenance, :pod_id => @pod.id
+            
+            flash[:notice].should be_present
+          end
+        end
+      end
+      
+      context 'with a pod not owned by the current user' do
+         it 'denies any changes' do
+          before = pod.maintenance?
+          
+          get :switch_maintenance, :pod_id => pod.id
+          
+          pod.maintenance?.should == before
+        end
+        
+        it 'redirects to the pod index' do
+          get :switch_maintenance, :pod_id => pod.id
+          
+          response.should redirect_to pods_path
+        end
+        
+        it 'should inform the user about the error' do
+          get :switch_maintenance, :pod_id => pod.id
+          
+          flash[:error].should be_present
+        end
+      end
+      
+      context 'with a not existing pod' do
+        before do
+          pod = Factory :pod
+          @pod_id = pod.id
+          pod.destroy
+        end
+        
+        it 'redirects back to the index' do
+          get :switch_maintenance, :pod_id => @pod_id
+          
+          response.should redirect_to :action => :index
+        end
+        
+        it 'should give an error message' do
+          get :switch_maintenance, :pod_id => @pod_id
+          
+          flash[:error].should be_present
         end
       end
     end
