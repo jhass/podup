@@ -10,11 +10,13 @@ class PodsController < ApplicationController
   end
   
   def show
-    unless @pod = Pod.find(params[:id])
+    begin
+      @pod = Pod.find(params[:id])
+      @states = @pod.states.where(:maintenance => false).order('id DESC').limit(5)
+    rescue ActiveRecord::RecordNotFound
       flash[:error] = "No such pod"
-      redirect_to :index
+      redirect_to :action => :index
     end
-    @states = @pod.states.where(:maintenance => false).order('id DESC').limit(5)
   end
   
   def create

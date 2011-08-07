@@ -137,4 +137,83 @@ describe PodsController do
       end
     end
   end
+  
+  describe '#show' do
+    context 'with a not exisitng pod' do
+      before do
+        pod = Factory :pod
+        @pod_id = pod.id
+        pod.destroy
+      end
+      
+      it 'redirects to #index' do
+        get :show, :id => @pod_id
+        
+        response.should redirect_to :action => :index
+      end
+      
+      it 'gives a error message to the user' do
+        get :show, :id => @pod_id
+        
+        flash[:error].should be_present
+      end
+    end
+    
+    context 'with an existing pod' do
+      before do
+        @pod = Factory :pod
+      end
+      
+      context 'user is logged out' do
+        it 'succeeds' do
+          get :show, :id => @pod.id
+          
+          response.should be_success
+        end
+      end
+      
+      context 'user is logged in' do
+        before do
+          @user = Factory :user
+          sign_in :user, @user
+        end
+        
+        it 'succeeds' do
+          get :show, :id => @pod.id
+          
+          response.should be_success
+        end
+      end
+      
+      it 'assigns the right pod' do
+        get :show, :id => @pod.id
+        
+        assigns(:pod).should == @pod
+      end
+      
+      context 'with some states' do
+        before do
+          @states = []
+          10.times do
+            state = Factory :state, :pod => @pod
+            @states << state
+          end
+        end
+        
+        it 'assigns the five most recent states' do
+          get :show, :id => @pod.id
+          
+          assigns(:states).should == @states.reverse[0..4]
+        end
+        
+        it 'assigns no maintenance states' do
+          state = Factory :maintenance_state, :pod => @pod
+          
+          get :show, :id => @pod.id
+          
+          assigns(:states).include?(state).should be_false
+        end
+      end
+    end
+  end
 end

@@ -30,5 +30,16 @@ FactoryGirl.define do
     factory :unaccepted_pod do
     end
   end
+  
+  factory :state do
+    maintenance false
+    up true
+    pod
+    
+    factory :maintenance_state do
+      maintenance true
+      up false
+    end
+  end
 end
 
