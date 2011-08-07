@@ -5,6 +5,9 @@ require 'resque_scheduler'
 
 Resque.reset_delayed_queue
 
-Pod.accepted.each do |pod|
-  pod.enqueue!
+begin
+  Pod.accepted.each do |pod|
+    pod.enqueue!
+  end
+rescue ActiveRecord::StatementInvalid
 end
