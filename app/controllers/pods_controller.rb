@@ -15,7 +15,7 @@ class PodsController < ApplicationController
       @states = @pod.states.where(:maintenance => false).order('id DESC').limit(5)
     rescue ActiveRecord::RecordNotFound
       flash[:error] = "No such pod"
-      redirect_to :action => :index
+      redirect_to pods_path
     end
   end
   

@@ -145,10 +145,10 @@ describe PodsController do
         pod.destroy
       end
       
-      it 'redirects to #index' do
+      it 'redirects to the pod index' do
         get :show, :id => @pod_id
         
-        response.should redirect_to :action => :index
+        response.should redirect_to pods_path
       end
       
       it 'gives a error message to the user' do
@@ -300,10 +300,10 @@ describe PodsController do
           pod.destroy
         end
         
-        it 'redirects back to the index' do
+        it 'redirects back to the pods index' do
           get :switch_maintenance, :pod_id => @pod_id
           
-          response.should redirect_to :action => :index
+          response.should redirect_to pods_path
         end
         
         it 'should give an error message' do
