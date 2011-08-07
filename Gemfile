@@ -38,4 +38,5 @@ gem 'rake', '0.8.7' # rake dsl
 group :development, :test do
   gem 'ruby-debug'
   gem 'rspec-rails'
+  gem 'factory_girl_rails'
 end
