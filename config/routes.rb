@@ -6,13 +6,12 @@ Podup::Application.routes.draw do
     get :switch_maintenance
   end
   
-  resources :countries, :only => [:index, :show] do
-    collection do
+  resources :countries, :only => [:index, :show]
+  scope 'countries', :controller => :countries do
       get :get_code_for_current_ip
-    end
+      get 'get_code_for/:host' => :get_code_for, :constraints => { :host => /.+/ }, :as => :get_code_for_host
   end
-  get 'countries/get_code_for/:host' => "countries#get_code_for", :constraints => { :host => /.+/ }
-  
+
   match 'users/edit' => redirect('/user/edit')
   devise_for :users, :controllers => { :registrations => "registrations"}
   resources :users, :only => [:show], :as => 'public_user'

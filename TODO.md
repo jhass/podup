@@ -25,7 +25,7 @@
 
 ### moar validation
 
-- case insensive checks
+- case insensitive checks
 - pod
   - on creation
   - on update
@@ -40,6 +40,3 @@
 - travis build
   - BDD (?)
 - Logging
-
-
-### Fix get_code_for route
