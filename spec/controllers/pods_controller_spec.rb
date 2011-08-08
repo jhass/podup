@@ -215,6 +215,138 @@ describe PodsController do
     end
   end
   
+  describe "#create" do
+    context 'with logged out user' do
+      it 'redirects to the user sign in page' do
+        post :create
+        
+        response.should redirect_to user_session_path
+      end
+    end
+    
+    context 'with logged in user' do
+      before do
+        sign_in :user, user
+        
+        #if pod = Pod.where(:name ="Test pod").first
+        #  pod.destroy
+        #end
+      end
+      
+      it 'creates a new pod' do
+        expect {
+          post :create, :pod => {:name => "Test pod",
+                                 :url => "http://test-pod.example.org",
+                                 :location => "DE"}
+        }.to change(Pod, :count).by(1)
+      end
+      
+      it 'does not create a new pod with insufficient params' do
+        expect {
+          post :create, :no_pod => {:foo => :bar}
+        }.to change(Pod, :count).by(0)
+      end
+      
+      it 'redirects to the pods index with sufficient params' do
+        post :create, :pod => {:name => "Test pod",
+                               :url => "http://test-pod.example.org",
+                               :location => "DE"}
+        
+        response.should redirect_to pods_path
+      end
+      
+      it 'redirects to the new pod form with insufficent params' do
+        post :create, :no_pod => {:foo => :bar}
+        
+        response.should redirect_to new_pod_path
+      end
+      
+      it 'verifes that the name fied is set' do
+        expect {
+          post :create, :pod => {:url => "http://test-pod.example.org",
+                                 :location => "DE"}
+        }.to change(Pod, :count).by(0)
+      end
+      
+      it 'verifes that the url field is set' do
+        expect {
+          post :create, :pod => {:name => "Test pod",
+                                 :location => "DE"}
+        }.to change(Pod, :count).by(0)
+      end
+      
+      it 'validates the url field' do
+        expect {
+          post :create, :pod => {:name => "Test pod",
+                                  :url => "tritratralala",
+                                  :location => "DE"}
+        }.to change(Pod, :count).by(0)
+      end
+      
+      it 'verifes that the location field is set' do
+        expect {
+          post :create, :pod => {:name => "Test pod",
+                                 :url => "http://test-pod.example.org"}
+        }.to change(Pod, :count).by(0)
+      end
+      
+      it 'validates the location field' do
+        expect {
+          post :create, :pod => {:name => "Test pod",
+                                 :url => "http://test-pod.example.org",
+                                 :location => "Absurdistan"}
+        }.to change(Pod, :count).by(0)
+      end
+      
+      it 'does not allow two pods with the same name' do
+        expect {
+          post :create, :pod => {:name => "Test pod",
+                                  :url => "http://test-pod.example.org",
+                                  :location => "DE"}
+          post :create, :pod => {:name => "Test pod",
+                                  :url => "http://test-pod2.example.org",
+                                  :location => "DE"}
+        }.to change(Pod, :count).by(1)
+      end
+      
+      it 'does not allow two pods with the same url' do
+        expect {
+          post :create, :pod => {:name => "Test pod",
+                                  :url => "http://test-pod.example.org",
+                                  :location => "DE"}
+          post :create, :pod => {:name => "Test pod 2",
+                                  :url => "http://test-pod.example.org",
+                                  :location => "DE"}
+        }.to change(Pod, :count).by(1)
+      end
+      
+      it 'informs the user about a failure' do
+        post :create, :no_pod => {:foo => :bar}
+        
+        flash[:error].should be_present
+      end
+      
+      it 'informs the user about the success' do
+        post :create, :pod => {:name => "Test pod",
+                               :url => "http://test-pod.example.org",
+                               :location => "DE"}
+        
+        flash[:notice].should be_present
+      end
+    end
+  end
+  
+  describe "#update" do
+    context 'withlogged out user' do
+      it 'redirects to the user sign in page' do
+        put :update, :id => 'dummy'
+        
+        response.should redirect_to user_session_path
+      end
+    end
+  end
+  
+  
   describe '#switch_maintenance' do
     let(:pod) { Factory :pod }
     

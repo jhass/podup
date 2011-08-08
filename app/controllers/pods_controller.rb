@@ -1,4 +1,5 @@
-require 'uri'
+require File.join(Rails.root, 'lib', 'url.rb')
+
 class PodsController < ApplicationController
   before_filter :authenticate_user!, :except => [:index, :show]
   def index
@@ -24,7 +25,7 @@ class PodsController < ApplicationController
     unless needed_params_present?
       flash[:error] = "All fields are required"
     else
-      if uri = URI.parse(params[:pod][:url])
+      if uri = WebURL.parse(params[:pod][:url])
         if Pod.where(:name => params[:pod][:name]).exists?
           flash[:error] = "Name already used"
         elsif Pod.where(:url => params[:pod][:url]).exists?
@@ -42,7 +43,9 @@ class PodsController < ApplicationController
       end
     end
     
-    redirect_to success ? pods_path : new_user_pod_path
+    #debugger
+    
+    redirect_to success ? pods_path : new_pod_path
   end
   
   def update

@@ -1,4 +1,4 @@
-require 'uri'
+require File.join(Rails.root, 'lib', 'url.rb')
 
 class Pod < ActiveRecord::Base
   belongs_to :owner, :class_name => 'User', :foreign_key => :owner_id
@@ -6,6 +6,8 @@ class Pod < ActiveRecord::Base
   belongs_to :location
   
   validates_presence_of :name, :url, :location, :owner
+  validates_uniqueness_of :name, :url
+  validates_format_of :url, :with => WebURL.regex
   
   attr_accessible :name, :score, :url, :location, :owner, :maintenance, 
                   :accepted, :version, :updated, :reliability, :upsince
@@ -19,7 +21,7 @@ class Pod < ActiveRecord::Base
   #Atributes
   
   def uri
-    @uri ||= URI.parse(self.url)
+    @uri ||= WebURL.parse(self.url)
   end
   
   def version

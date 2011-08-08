@@ -8,13 +8,13 @@ FactoryGirl.define do
 
   factory :pod do
     sequence(:name) {|n| "Pod #{n}" }
-    url { "http://#{name.downcase.gsub(' ', '_')}.pods.example.org" }
+    url { "http://#{name.downcase.gsub(' ', '-')}.pods.example.org" }
     location Location.first
     owner
     
     factory :accepted_pod do
       sequence(:name) {|n| "Accepted pod #{n}" }
-      url { "http://#{name.downcase.gsub(' ', '_')}.pods.example.org" }
+      url { "http://#{name.downcase.gsub(' ', '-')}.pods.example.org" }
       accepted true
       
       factory :active_pod do
@@ -22,7 +22,7 @@ FactoryGirl.define do
       
       factory :inactive_pod do
         sequence(:name) {|n| "Inactive pod #{n}" }
-        url { "http://#{name.downcase.gsub(' ', '_')}.pods.example.org" }
+        url { "http://#{name.downcase.gsub(' ', '-')}.pods.example.org" }
         maintenance Time.at(1)
       end
     end
