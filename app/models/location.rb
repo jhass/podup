@@ -6,6 +6,7 @@ class Location < ActiveRecord::Base
   attr_accessible :name, :code, :flag
   
   validates_presence_of :name, :code
+  validates_uniqueness_of :name, :code
   
   def flag_path
     if self.flag
