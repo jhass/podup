@@ -51,25 +51,32 @@ class PodsController < ApplicationController
   def update
     unless needed_params_present?
       flash[:error] = "All fields are required"
+      redirect_to pod_path(:id => params[:id])
     else
-      if uri = URI.parse(params[:pod][:url]) and pod = Pod.find(params[:id])
-        if params[:pod][:name] != pod.name and Pod.where(:name => params[:pod][:name]).exists?
-          flash[:error] = "Name already submitted"
-        elsif params[:pod][:url] != pod.url and Pod.where(:url => params[:pod][:url]).exists?
-          flash[:error] = "There's another pod with that URL submitted"
-        elsif location = Location.where(:code => params[:pod][:location].downcase).first
-          #TODO: resque job
-          pod.update_attributes(params[:pod].merge(:location => location))
-          flash[:notice] = "You'll be notified when the changes are accepted"
+      begin
+        pod = Pod.find(params[:id])
+        if uri = WebURL.parse(params[:pod][:url])
+          if params[:pod][:name] != pod.name and Pod.where(:name => params[:pod][:name]).exists?
+            flash[:error] = "Name already submitted"
+          elsif params[:pod][:url] != pod.url and Pod.where(:url => params[:pod][:url]).exists?
+            flash[:error] = "There's another pod with that URL submitted"
+          elsif location = Location.where(:code => params[:pod][:location].downcase).first
+            #TODO: resque job, unaccept pod
+            pod.update_attributes(params[:pod].merge(:location => location))
+            flash[:notice] = "You'll be notified when the changes are accepted"
+          else
+            flash[:error] = "The given location is invalid"
+          end
         else
-          flash[:error] = "The given location is invalid"
+          flash[:error] = "The given URL is invalid"
         end
+      rescue ActiveRedord::RecordNotFound
+        flash[:error] = "Pod not found"
+        redirect_to pods_path
       else
-        flash[:error] = "The given URL is invalid or there were another problem"
+        redirect_to pod_path(pod)
       end
     end
-    
-    redirect_to :back
   end
   
   def switch_maintenance

@@ -216,6 +216,15 @@ describe PodsController do
   end
   
   describe "#create" do
+    let(:good_pod_params) { { :pod => {
+                                :name => "Test pod",
+                                :url => "http://test-pod.example.org",
+                                :location => "de" 
+                              } 
+                            } 
+                          }
+    let(:bad_pod_params) { { :no_pod => { :foo => :bar } } }
+    
     context 'with logged out user' do
       it 'redirects to the user sign in page' do
         post :create
@@ -227,109 +236,95 @@ describe PodsController do
     context 'with logged in user' do
       before do
         sign_in :user, user
-        
-        #if pod = Pod.where(:name ="Test pod").first
-        #  pod.destroy
-        #end
       end
       
-      it 'creates a new pod' do
+      it 'creates a new pod on success' do
         expect {
-          post :create, :pod => {:name => "Test pod",
-                                 :url => "http://test-pod.example.org",
-                                 :location => "DE"}
+          post :create, good_pod_params
         }.to change(Pod, :count).by(1)
       end
       
       it 'does not create a new pod with insufficient params' do
         expect {
-          post :create, :no_pod => {:foo => :bar}
+          post :create, bad_pod_params
         }.to change(Pod, :count).by(0)
       end
       
       it 'redirects to the pods index with sufficient params' do
-        post :create, :pod => {:name => "Test pod",
-                               :url => "http://test-pod.example.org",
-                               :location => "DE"}
+        post :create, good_pod_params
         
         response.should redirect_to pods_path
       end
       
       it 'redirects to the new pod form with insufficent params' do
-        post :create, :no_pod => {:foo => :bar}
+        post :create, bad_pod_params
         
         response.should redirect_to new_pod_path
       end
       
-      it 'verifes that the name fied is set' do
+      it 'verifies that the name fied is set' do
         expect {
-          post :create, :pod => {:url => "http://test-pod.example.org",
-                                 :location => "DE"}
+          post :create, :pod => {:url => good_pod_params[:pod][:url],
+                                 :location => good_pod_params[:pod][:location]}
         }.to change(Pod, :count).by(0)
       end
       
-      it 'verifes that the url field is set' do
+      it 'verifies that the url field is set' do
         expect {
-          post :create, :pod => {:name => "Test pod",
-                                 :location => "DE"}
+          post :create, :pod => {:name => good_pod_params[:pod][:name],
+                                 :location => good_pod_params[:pod][:location]}
         }.to change(Pod, :count).by(0)
       end
       
       it 'validates the url field' do
         expect {
-          post :create, :pod => {:name => "Test pod",
+          post :create, :pod => {:name => good_pod_params[:pod][:name],
                                   :url => "tritratralala",
-                                  :location => "DE"}
+                                  :location => good_pod_params[:pod][:location]}
         }.to change(Pod, :count).by(0)
       end
       
-      it 'verifes that the location field is set' do
+      it 'verifies that the location field is set' do
         expect {
-          post :create, :pod => {:name => "Test pod",
-                                 :url => "http://test-pod.example.org"}
+          post :create, :pod => {:name => good_pod_params[:pod][:name],
+                                 :url => good_pod_params[:pod][:url]}
         }.to change(Pod, :count).by(0)
       end
       
       it 'validates the location field' do
         expect {
-          post :create, :pod => {:name => "Test pod",
-                                 :url => "http://test-pod.example.org",
+          post :create, :pod => {:name => good_pod_params[:pod][:name],
+                                 :url => good_pod_params[:pod][:url],
                                  :location => "Absurdistan"}
         }.to change(Pod, :count).by(0)
       end
       
       it 'does not allow two pods with the same name' do
         expect {
-          post :create, :pod => {:name => "Test pod",
-                                  :url => "http://test-pod.example.org",
-                                  :location => "DE"}
-          post :create, :pod => {:name => "Test pod",
+          post :create, good_pod_params
+          post :create, :pod => {:name => good_pod_params[:pod][:name],
                                   :url => "http://test-pod2.example.org",
-                                  :location => "DE"}
+                                  :location => good_pod_params[:pod][:location]}
         }.to change(Pod, :count).by(1)
       end
       
       it 'does not allow two pods with the same url' do
         expect {
-          post :create, :pod => {:name => "Test pod",
-                                  :url => "http://test-pod.example.org",
-                                  :location => "DE"}
+          post :create, good_pod_params
           post :create, :pod => {:name => "Test pod 2",
-                                  :url => "http://test-pod.example.org",
-                                  :location => "DE"}
+                                  :url => good_pod_params[:pod][:url],
+                                  :location => good_pod_params[:pod][:location]}
         }.to change(Pod, :count).by(1)
       end
       
       it 'informs the user about a failure' do
-        post :create, :no_pod => {:foo => :bar}
+        post :create, bad_pod_params
         
         flash[:error].should be_present
       end
       
       it 'informs the user about the success' do
-        post :create, :pod => {:name => "Test pod",
-                               :url => "http://test-pod.example.org",
-                               :location => "DE"}
+        post :create, good_pod_params
         
         flash[:notice].should be_present
       end
@@ -342,6 +337,147 @@ describe PodsController do
         put :update, :id => 'dummy'
         
         response.should redirect_to user_session_path
+      end
+    end
+    
+    context 'with logged in user' do
+      before do
+        sign_in :user, user
+        @pod = Factory :pod
+        
+        @pod_before = {:name => @pod.name, :url => @pod.url.to_s,
+                       :location => @pod.location.code }
+        
+        @good_pod_params = { :id => @pod.id,
+                             :pod => {
+                               :name => "Test pod",
+                               :url => "http://test-pod.example.org",
+                               :location => "de"
+                             }
+                           }
+        
+        @bad_pod_params = { :id => @pod.id, :no_pod => { :foo => :bar } }
+      end
+      
+      it 'updates the pod on success' do
+        put :update, @good_pod_params
+        
+        @pod.reload
+        @pod.name.should == @good_pod_params[:pod][:name]
+        @pod.url.to_s.should == @good_pod_params[:pod][:url]
+        @pod.location.code.should == @good_pod_params[:pod][:location]
+      end
+      
+      it 'does not update the pod with insufficient params' do
+        put :update, @bad_pod_params
+        
+        @pod.reload
+        @pod.name.should == @pod_before[:name]
+        @pod.url.to_s.should == @pod_before[:url]
+        @pod.location.code.should == @pod_before[:location]
+      end
+      
+      it 'redirects to the pods show page on success' do
+        put :update, @good_pod_params
+        
+        response.should redirect_to pod_path(@pod)
+      end
+      
+      it 'redirects to the pods show page on failure' do
+        put :update, @bad_pod_params
+        
+        response.should redirect_to pod_path(@pod)
+      end
+      
+      it 'verifies that the name field is set' do
+        put :update, :id => @pod.id,
+                     :pod => { :url => @good_pod_params[:pod][:url],
+                               :location => @good_pod_params[:pod][:location] }
+        
+        @pod.reload
+        @pod.name.should == @pod_before[:name]
+        @pod.url.to_s.should == @pod_before[:url]
+        @pod.location.code.should == @pod_before[:location]
+      end
+      
+      it 'verifies that the url field is set' do
+        put :update, :id => @pod.id,
+                     :pod => { :name => @good_pod_params[:pod][:name],
+                               :location => @good_pod_params[:pod][:location] }
+        
+        @pod.reload
+        @pod.name.should == @pod_before[:name]
+        @pod.url.to_s.should == @pod_before[:url]
+        @pod.location.code.should == @pod_before[:location]
+      end
+      
+      it 'validates the url field' do
+        put :update, :id => @pod.id,
+                     :pod => { :name => @good_pod_params[:pod][:name],
+                               :url => "tritratralala",
+                               :location => @good_pod_params[:pod][:location] }
+        
+        @pod.reload
+        @pod.name.should == @pod_before[:name]
+        @pod.url.to_s.should == @pod_before[:url]
+        @pod.location.code.should == @pod_before[:location]
+      end
+      
+      it 'verifies that the location field is set' do
+        put :update, :id => @pod.id,
+                     :pod => { :name => @good_pod_params[:pod][:name],
+                               :url => @good_pod_params[:pod][:url] }
+        
+        @pod.reload
+        @pod.name.should == @pod_before[:name]
+        @pod.url.to_s.should == @pod_before[:url]
+        @pod.location.code.should == @pod_before[:location]
+      end
+      
+      it 'validates the location field' do
+        put :update, :id => @pod.id,
+                     :pod => { :name => @good_pod_params[:pod][:name],
+                               :url => @good_pod_params[:pod][:url],
+                               :location => "Absurdistan" }
+        
+        @pod.reload
+        @pod.name.should == @pod_before[:name]
+        @pod.url.to_s.should == @pod_before[:url]
+        @pod.location.code.should == @pod_before[:location]
+      end
+      
+      it 'does not allow two pods with the same name' do
+        Factory :pod, :name => @good_pod_params[:pod][:name]
+        
+        put :update, @good_pod_params
+        
+        @pod.reload
+        @pod.name.should == @pod_before[:name]
+        @pod.url.to_s.should == @pod_before[:url]
+        @pod.location.code.should == @pod_before[:location]
+      end
+      
+      it 'does not allow two pods with the same url' do
+        Factory :pod, :url => @good_pod_params[:pod][:url]
+        
+        put :update, @good_pod_params
+        
+        @pod.reload
+        @pod.name.should == @pod_before[:name]
+        @pod.url.to_s.should == @pod_before[:url]
+        @pod.location.code.should == @pod_before[:location]
+      end
+      
+      it 'informs the user about a failure' do
+        put :update, @bad_pod_params
+        
+        flash[:error].should be_present
+      end
+      
+      it 'informs the user about the success' do
+        put :update, @good_pod_params
+        
+        flash[:notice].should be_present
       end
     end
   end
