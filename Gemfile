@@ -36,7 +36,10 @@ gem 'rake', '0.8.7' # rake dsl
 
 
 group :development, :test do
-  gem 'ruby-debug'
+  gem 'ruby-debug', :platforms => :ruby_18
+  gem 'ruby-debug19', :platforms => :ruby_19
+  gem 'linecache', :platforms => :ruby_18
+  gem 'linecache19', :platforms => :ruby_19
   gem 'rspec-rails'
   gem 'factory_girl_rails'
 end

@@ -36,3 +36,5 @@ production:
 
 test:
   <<: *defaults
+  mailer:
+    enable: false
