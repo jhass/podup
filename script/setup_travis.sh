@@ -5,6 +5,9 @@ cp config/database.yml.example config/database.yml
 echo "create test database"
 mysql -e 'create database podup_test;' >/dev/null
 
+echo "load database"
+RAILS_ENV=test bundle exec rake db:schema:load
+
 echo "fetch geoip database"
 ./script/get_geoip.sh
 
