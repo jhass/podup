@@ -20,3 +20,5 @@ production:
 test:
   <<: *common
   database: podup_test
+  username:
+  password:
