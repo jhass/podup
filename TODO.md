@@ -35,8 +35,7 @@
   - on update
   - in the model
 
-### some specs for everything
+### much moar specs
 
-- travis build
-  - BDD (?)
+- BDD (?)
 - Logging

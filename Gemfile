@@ -33,10 +33,11 @@ gem 'resque-scheduler'
 # bugfixes
 gem 'require_relative' # linecache
 gem 'rake', '0.8.7' # rake dsl
+gem 'SystemTimer', '1.2.1', :platforms => :ruby_18 # because resque likes it so much
 
 
 group :development, :test do
-  gem 'ruby-debug', :platforms => :ruby_18
+  gem 'ruby-debug', :platforms => :mri_18
   gem 'ruby-debug19', :platforms => :ruby_19
   gem 'linecache', :platforms => :ruby_18
   gem 'linecache19', :platforms => :ruby_19
