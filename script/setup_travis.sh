@@ -13,3 +13,6 @@ mysql -e 'create database podup_test;' >/dev/null
 
 echo "load database schema"
 RAILS_ENV=test bundle exec rake db:schema:load
+
+echo "generate secret token"
+bundle exec rake generate:secret_token
