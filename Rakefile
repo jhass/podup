@@ -2,7 +2,11 @@
 # for example lib/tasks/capistrano.rake, and they will automatically be available to Rake.
 
 require File.expand_path('../config/application', __FILE__)
-require File.expand_path('../config/environment', __FILE__)
+begin
+  require File.expand_path('../config/environment', __FILE__)
+rescue Mysql2::Error => e
+  raise unless e.to_s.start_with?("Unknown database")
+end
 require 'rake'
 
 require 'resque/tasks'

@@ -180,8 +180,8 @@ class Pod < ActiveRecord::Base
     begin
       @site ||= Faraday.get(self.uri+'/users/sign_in')
     rescue Exception => e
-      puts e
-      #TODO log
+      #puts e
+      #TODO log, finer Exception catching
       false
     end
   end

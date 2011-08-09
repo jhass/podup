@@ -5,9 +5,8 @@ require 'resque_scheduler'
 
 Resque.reset_delayed_queue
 
-begin
-  Pod.accepted.each do |pod|
-    pod.enqueue!
-  end
-rescue ActiveRecord::StatementInvalid
+if ENV['RAILS_ENV'] == "test"
+  Resque.inline = true
+else
+  Resque.enqueue(Job::Startup)
 end

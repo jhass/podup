@@ -11,5 +11,5 @@ echo "fetch geoip database"
 echo "create test database"
 mysql -e 'create database podup_test;' >/dev/null
 
-echo "load database"
+echo "load database schema"
 RAILS_ENV=test bundle exec rake db:schema:load
