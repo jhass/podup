@@ -2,7 +2,9 @@ class UsersController < ApplicationController
   before_filter :authenticate_user!, :only => [:edit, :update, :destroy]
   
   def show
-    unless @user = User.find(params[:id])
+    begin
+      @user = User.find(params[:id])
+    rescue ActiveRecord::RecordNotFound
       flash[:error] = "No such user"
       redirect_to root_path
     else
@@ -13,23 +15,29 @@ class UsersController < ApplicationController
   def update
     changes = false
     params[:user] = {} unless params[:user]
-    params[:user].delete(:email) if params[:user][:email].blank?
-    if params[:user][:name]
+    
+    unless params[:user][:name].blank?
       if current_user.update_attributes(:name => params[:user][:name])
         changes = true
+      else
+        current_user.reload
       end
     end
-    if params[:user][:email]
+    
+    unless params[:user][:email].blank?
       if current_user.update_attributes(:email => params[:user][:email])
         changes = true
+      else
+        current_user.reload
       end
     end
-    if params[:user][:public_email]
-      unless params[:user][:public_email].blank? or
-             params[:user][:public_email].start_with?("http") or 
+    
+    unless params[:user][:public_email].blank?
+      unless params[:user][:public_email].start_with?("http") or 
              params[:user][:public_email].start_with?("mailto")
         params[:user][:public_email] = "mailto:#{params[:user][:public_email]}"
       end
+      
       if current_user.update_attributes(:public_email => params[:user][:public_email])
         changes = true
       end
@@ -39,18 +47,16 @@ class UsersController < ApplicationController
       flash[:notice] = "Account details updated successfully"
       password = false
     else
-      params[:user].delete(:current_password) if params[:user][:current_password].blank?
-      params[:user].delete(:password) if params[:user][:password].blank?
-      params[:user].delete(:password_confirmation) if params[:user][:password_confirmation].blank?
-      
-      if params[:user][:current_password] and params[:user][:password] and params[:user][:password_confirmation]
+      unless params[:user][:current_password].blank? or
+             params[:user][:password].blank? or
+             params[:user][:password_confirmation].blank?
         if current_user.update_with_password(params[:user])
           flash[:notice] = "Password changed successfuly"
           password = true
-        else
-          flash[:error] = "Password change failed"
-          password = false
         end
+      else
+        flash[:error] = "Password change failed"
+        password = false
       end
     end
     

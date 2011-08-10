@@ -17,10 +17,6 @@ class User < ActiveRecord::Base
   end
   
   def contactable?
-    if self.public_email and !self.public_email.blank?
-      true
-    else
-      false
-    end
+    self.public_email.present?
   end
 end
