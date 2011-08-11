@@ -197,4 +197,115 @@ describe CountriesController do
       end
     end
   end
+  
+  describe '#get_code_for_current_ip' do
+    before do
+      Location.stub!(:from_host).and_return(location)
+    end
+    
+    it 'responds to json' do
+      controller.request.stub!(:remote_ip).and_return('127.0.0.2')
+      
+      get :get_code_for_current_ip, :format => :json
+      
+      response.should be_success
+    end
+    
+    it 'does not respond to a normal request' do
+      controller.request.stub!(:remote_ip).and_return('127.0.0.2')
+      
+      get :get_code_for_current_ip
+      
+      response.should_not be_success
+    end
+    
+    it 'returns the correct location' do
+      controller.request.stub!(:remote_ip).and_return('127.0.0.2')
+      
+      get :get_code_for_current_ip, :format => :json
+      
+      response.body.should == location.to_json
+    end
+    
+    it 'returns 404 if the location cannnot be determined' do
+      controller.request.stub!(:remote_ip).and_return('127.0.0.2')
+      Location.stub!(:from_host).and_return(nil)
+      
+      get :get_code_for_current_ip, :format => :json
+      
+      response.status.should == 404
+    end
+    
+    it 'uses the HTTP_X_FORWARDED_FOR header if it is present and the remote ip is 127.0.0.1' do
+      controller.request.stub!(:remote_ip).and_return('127.0.0.1')
+      controller.request.stub!(:env).and_return({ 'HTTP_X_FORWARDED_FOR' => '127.0.0.2' })
+      
+      Location.should_receive(:from_host).with('127.0.0.2')
+      
+      get :get_code_for_current_ip, :format => :json
+    end
+  end
+  
+  describe '#get_code_for' do
+    before do
+      Location.stub!(:from_host).and_return(location)
+    end
+    
+    it 'fails on an invalid request' do
+      get :get_code_for, :host => ' ', :format => :json
+      
+      response.should_not be_success
+    end
+    
+    
+    it 'responds to json' do
+      get :get_code_for, :host => '127.0.0.2', :format => :json
+      
+      response.should be_success
+    end
+    
+    it 'does not respond to a normal request' do
+      get :get_code_for, :host => '127.0.0.2'
+      
+      response.should_not be_success
+    end
+    
+    it 'parses the host parameter' do
+      URI.should_receive(:parse).with("http://example.org").and_return(URIFake.new("example.org"))
+      
+      get :get_code_for, :host => "http://example.org", :format => :json
+    end
+    
+    it 'should call Location.from_host with the host' do
+      Location.should_receive(:from_host).with("example.org").and_return(location)
+      
+      get :get_code_for, :host => "http://example.org", :format => :json
+    end
+    
+    it 'expands :/ to :// in the host parameter' do
+      URI.should_receive(:parse).with("http://example.org").and_return(URIFake.new("example.org"))
+      
+      get :get_code_for, :host => "http:/example.org", :format => :json
+    end
+    
+    it 'does not expand :// to :/// in the host parameter' do
+      URI.should_receive(:parse).with("http://example.org").and_return(URIFake.new("example.org"))
+      
+      get :get_code_for, :host => "http://example.org", :format => :json
+    end
+    
+    it 'returns the correct location' do
+      get :get_code_for, :host => "127.0.0.2", :format => :json
+      
+      response.body.should == location.to_json
+    end
+    
+    it 'returns a 404 if the location cannot be determined' do
+      Location.stub!(:from_host).and_return(nil)
+      
+      get :get_code_for, :host => "127.0.0.1", :format => :json
+      
+      response.status.should == 404
+    end
+  end
 end
