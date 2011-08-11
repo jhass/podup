@@ -1,4 +1,4 @@
-[![Build Status](http://travis-ci.org/MrZYX/podup.png)](http://travis-ci.org/MrZYX/podup)
+[![Build Status](https://secure.travis-ci.org/MrZYX/podup.png)](http://travis-ci.org/MrZYX/podup)
 
 ### This is a recode of SargoDaryas awesome podup (http://podup.sargodarya.de) as a rails app.
 
