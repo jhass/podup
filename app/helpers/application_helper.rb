@@ -26,6 +26,6 @@ module ApplicationHelper
     else
       r += "never"
     end
-    r
+    r.html_safe
   end
 end

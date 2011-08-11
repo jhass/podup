@@ -32,5 +32,9 @@ describe PodsHelper do
     it 'links to the locations path' do
       helper.location_for(location).should include country_path(location)
     end
+    
+    it 'should return html safe content' do
+      helper.location_for(location).html_safe?.should be_true
+    end
   end
 end
