@@ -7,7 +7,7 @@ class CountriesController < ApplicationController
   def index
     @locations = Pod.accepted.active.collect { |x| x.location }
     @locations.uniq!
-    @locations.sort! { |x,y| x.name <=> y.name }
+    @locations.sort! { |x, y| x.name.downcase <=> y.name.downcase }
   end
   
   def show

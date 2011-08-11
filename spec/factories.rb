@@ -5,6 +5,11 @@ FactoryGirl.define do
     password_confirmation { password }
   end
   
+  factory :location do
+    sequence(:name) {|n| "Country #{n}" }
+    sequence(:code) {|n| "c#{n}" }
+  end
+  
   factory :pod do
     sequence(:name) {|n| "Pod #{n}" }
     sequence(:url) {|n| "http://pod-#{n}.pods.example.org" }
