@@ -1,5 +1,5 @@
 require 'spec_helper'
 
-describe CountriesHelper do
+describe ApplicationHelper do
   
 end

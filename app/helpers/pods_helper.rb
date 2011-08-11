@@ -2,8 +2,10 @@ module PodsHelper
   def location_for(object)
     if object.is_a?(Pod)
       location = object.location
-    else
+    elsif object.is_a?(Location)
       location = object
+    else
+      return
     end
     r = ""
     r += image_tag location.flag_path
