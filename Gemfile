@@ -36,11 +36,16 @@ gem 'rake', '0.8.7' # rake dsl
 gem 'SystemTimer', '1.2.1', :platforms => :ruby_18 # because resque likes it so much
 
 
-group :development, :test do
+group :development do
   gem 'ruby-debug', :platforms => :mri_18
   gem 'ruby-debug19', :platforms => :ruby_19
   gem 'linecache', :platforms => :ruby_18
   gem 'linecache19', :platforms => :ruby_19
+  gem 'rspec-rails'
+  gem 'factory_girl_rails'
+end
+
+group :test do
   gem 'rspec-rails'
   gem 'factory_girl_rails'
 end
