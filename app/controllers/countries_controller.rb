@@ -11,13 +11,16 @@ class CountriesController < ApplicationController
   end
   
   def show
-    unless @location = Location.find(params[:id])
+    begin
+      @location = Location.find(params[:id])
+    rescue ActiveRecord::RecordNotFound
       flash[:error] = "Couldn't find country"
-      redirect :index
+      redirect_to countries_path
     else
-      unless @pods = Pod.active.where(:location_id => @location.id).order('score DESC')
+      @pods = Pod.accepted.active.where(:location_id => @location.id).order('score DESC')
+      if @pods.blank?
         flash[:error] = "Couldn't find any active pods for #{@location.name}"
-        redirect :index
+        redirect_to countries_path
       end
     end
   end
