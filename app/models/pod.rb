@@ -91,7 +91,7 @@ class Pod < ActiveRecord::Base
     end
     up = site ? true : false
     if save_state
-      State.create!(:up => up, :pod_id => self.id)
+      State.create!(:up => up, :maintenance => false, :pod_id => self.id)
     end
     up
   end

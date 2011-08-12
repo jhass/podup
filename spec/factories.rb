@@ -34,13 +34,25 @@ FactoryGirl.define do
   end
   
   factory :state do
+    up false
     maintenance false
-    up true
     pod
     
-    factory :maintenance_state do
-      maintenance true
-      up false
+    factory :up_state do
+      up true
+      
+      factory :up_maintenance_state do
+        maintenance true
+      end
+    end
+    
+    factory :down_state do
+      factory :maintenance_state do
+        maintenance true
+        
+        factory :down_maintenance_state do
+        end
+      end
     end
   end
 end

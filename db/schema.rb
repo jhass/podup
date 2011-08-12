@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110629203904) do
+ActiveRecord::Schema.define(:version => 20110812145300) do
 
   create_table "locations", :force => true do |t|
     t.string   "code"
@@ -40,10 +40,10 @@ ActiveRecord::Schema.define(:version => 20110629203904) do
 
   create_table "states", :force => true do |t|
     t.integer  "pod_id"
-    t.boolean  "up",          :default => false
+    t.boolean  "up"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "maintenance", :default => false
+    t.boolean  "maintenance"
   end
 
   create_table "users", :force => true do |t|
