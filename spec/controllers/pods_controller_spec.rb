@@ -508,7 +508,7 @@ describe PodsController do
           
           context 'with enabled maintenance mode' do
             before do
-              @pod.enable_maintenance
+              @pod.enable_maintenance!
             end
             
             it 'should turn the maintenance mode off' do
@@ -521,7 +521,7 @@ describe PodsController do
         
           context 'with disabled maintenance mode' do
             before do
-              @pod.disable_maintenance
+              @pod.disable_maintenance!
             end
             
             it 'should turn the maintenance mode on' do
