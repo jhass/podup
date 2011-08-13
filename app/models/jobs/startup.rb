@@ -1,4 +1,4 @@
-module Job
+module Jobs
   class Startup
     @queue = :common
     

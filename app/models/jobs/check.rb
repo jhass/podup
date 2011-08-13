@@ -1,4 +1,4 @@
-module Job
+module Jobs
   class Check
     @queue = :normal_checks
     

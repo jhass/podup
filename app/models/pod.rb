@@ -164,11 +164,11 @@ class Pod < ActiveRecord::Base
   end
   
   def enqueue!
-    Resque.enqueue_in(Settings[:check_every], Job::Check, self.id)
+    Resque.enqueue_in(Settings[:check_every], Jobs::Check, self.id)
   end
   
   def enqueue_approval!
-    Resque.enqueue(Job::Approval, self.id)
+    Resque.enqueue(Jobs::Approval, self.id)
   end
   
   private
