@@ -155,11 +155,11 @@ class Pod < ActiveRecord::Base
   
   # Actions
   
-  def enable_maintenance
+  def enable_maintenance!
     self.update_attributes(:maintenance => Time.now)
   end
   
-  def disable_maintenance
+  def disable_maintenance!
     self.update_attributes(:maintenance => nil)
   end
   

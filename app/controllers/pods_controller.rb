@@ -84,10 +84,10 @@ class PodsController < ApplicationController
       @pod = Pod.find(params[:pod_id])
       if current_user.owns?(@pod)
         if @pod.maintenance?
-          @pod.disable_maintenance
+          @pod.disable_maintenance!
           flash[:notice] = "Maintenance mode disabled"
         else
-          @pod.enable_maintenance
+          @pod.enable_maintenance!
           flash[:notice] = "Maintenance mode enabled"
         end
         success = true
