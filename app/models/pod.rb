@@ -18,7 +18,7 @@ class Pod < ActiveRecord::Base
   scope :active, where('pods.maintenance IS NULL OR pods.maintenance = ? OR pods.maintenance > ?', Time.at(0), Time.now-Settings[:inactive])
   
   
-  #Atributes
+  # Atributes
   
   def uri
     @uri ||= WebURL.parse(self.url)

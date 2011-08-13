@@ -23,6 +23,9 @@
 
 ### mini API
 
+- compatible to SargoDaryas podup
+- statistic widget for pod owners
+
 ### moar validation
 
 - case insensitive checks
@@ -35,7 +38,11 @@
   - on update
   - in the model
 
-### much moar specs
+### specs for
+
+- pod model
+- location model
+- resque jobs
 
 - BDD (?)
 - Logging
