@@ -1,0 +1,8 @@
+= form_for @pod do |f|
+  = f.label :name, "Name"
+  = f.text_field :name
+  = f.label :url, "URL"
+  = f.text_field :url
+  = f.label :location, "Location"
+  = f.country_select :location
+  = f.submit "Add", :id => "pod_submit"

@@ -1,11 +1,4 @@
 - content_for :page_title do
   Submit new pod
 
-= form_for Pod.new do |f|
-  = f.label :name, "Name"
-  = f.text_field :name
-  = f.label :url, "URL"
-  = f.text_field :url
-  = f.label :location, "Location"
-  = f.country_select :location
-  = f.submit "Add"
+= render 'pods/pod_form'

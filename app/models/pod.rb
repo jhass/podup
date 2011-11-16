@@ -24,6 +24,10 @@ class Pod < ActiveRecord::Base
     @uri ||= WebURL.parse(self.url)
   end
   
+  def domain
+    uri.host
+  end
+  
   def version
     version = 'n/a'
     if self[:version].blank?

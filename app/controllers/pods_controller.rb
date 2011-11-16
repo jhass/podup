@@ -20,6 +20,10 @@ class PodsController < ApplicationController
     end
   end
   
+  def new
+    @pod = Pod.new
+  end
+  
   def create
     success = false
     unless needed_params_present?
@@ -30,22 +34,24 @@ class PodsController < ApplicationController
           flash[:error] = "Name already used"
         elsif Pod.where(:url => params[:pod][:url]).exists?
           flash[:error] = "Pod already submitted"
-        elsif location = Location.where(:code => params[:pod][:location].downcase).first
-          Pod.create!(:name => params[:pod][:name], :url => uri.to_s, :location => location,
+        else
+          pod = Pod.new(:name => params[:pod][:name], :url => uri.to_s, :location => location,
                       :owner => current_user)
+          location = Location..new(:code => params[:pod][:location].downcase).first
           flash[:notice] = "You'll be notified when your pod is accepted"
           success = true
-        else
-          flash[:error] = "The given location is invalid"
         end
       else
         flash[:error] = "The given URL is invalid"
       end
     end
     
-    #debugger
-    
-    redirect_to success ? pods_path : new_pod_path
+    if success
+      redirect_to  pods_path
+    else
+      @pod = Pod.new(:name => params[:pod][:name], :url => params[:pod][:url])
+      render 'pods/new'
+    end
   end
   
   def update

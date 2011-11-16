@@ -10,7 +10,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20110812145300) do
+ActiveRecord::Schema.define(:version => 20111114114906) do
 
   create_table "locations", :force => true do |t|
     t.string   "code"
@@ -18,6 +18,8 @@ ActiveRecord::Schema.define(:version => 20110812145300) do
     t.datetime "updated_at"
     t.string   "name"
     t.string   "flag"
+    t.float    "latitude"
+    t.float    "longitude"
   end
 
   add_index "locations", ["code"], :name => "index_locations_on_code", :unique => true

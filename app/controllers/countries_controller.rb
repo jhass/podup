@@ -43,9 +43,12 @@ class CountriesController < ApplicationController
     if params[:host].blank?
       render :nothing => true, :status => 400
     else
-      host = URI.parse(params[:host].gsub('://', ':/').gsub(':/', '://')).host
+      host = params[:host]
+      host = "http://#{host}" unless host.starts_with? "http"
+      host = host.gsub(':/', '://').gsub(":///", "://")
+      host = URI.parse(host).host
       respond_to do |format|
-        format.json {
+        format.any {
           if location = Location.from_host(host)
             render :json => location.to_json
           else

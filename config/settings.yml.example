@@ -7,10 +7,6 @@ defaults: &defaults
   # The time in seconds after that a pod should be rechecked (default 10 minutes, 600) 
   check_every: 600
   
-  # run ./script/get_geoip.dat and leave this unchanged
-  geoip:
-    country_db: "vendor/geoip_country.dat"
-  
   faraday:
     # Debian, Archlinux: "/etc/ssl/certs/ca-certificates.crt"
     ca_file: "/etc/ssl/certs/ca-certificates.crt"
