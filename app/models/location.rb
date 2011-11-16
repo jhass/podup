@@ -1,15 +1,17 @@
 class Location < ActiveRecord::Base
   has_many :pods
   
-  attr_accessible :name, :code, :flag, :latitude, :longitude, :host
+  attr_accessible :name, :code, :flag, :latitude, :longitude
   
   
-  geocoded_by :host
+  geocoded_by_ip :host
   
-  validates_presence_of :name, :code, :latitude, :longitude
+  validates_presence_of :name, :code
   validates_uniqueness_of :name, :code, :latitude, :longitude
   
-  after_validation :geocode
+  after_validation :geocode, :if => lambda { self.host }
+  
+  scope :countries, where(:latitude => nil, :longitude => nil)
   
   def flag_path
     if self.flag
@@ -17,6 +19,10 @@ class Location < ActiveRecord::Base
     else
       "icons/unknown.png"
     end
+  end
+  
+  def host
+    self.pods.first ? self.pods.first.domain : false
   end
   
   def self.from_host(host)

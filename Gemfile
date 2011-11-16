@@ -17,7 +17,7 @@ gem 'faraday-stack'
 
 # location
 gem 'countries'
-gem 'geocoder', :git => 'git://github.com/alexreisner/geocoder.git'
+gem 'geocoder', '1.0.5'
 
 # configuration
 gem 'settingslogic'

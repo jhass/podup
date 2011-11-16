@@ -1,10 +1,4 @@
 GIT
-  remote: git://github.com/alexreisner/geocoder.git
-  revision: 833fcf3ce7ec52b5bf5b87297a081539864e6ee4
-  specs:
-    geocoder (1.0.5)
-
-GIT
   remote: git://github.com/diaspora/diaspora-client.git
   revision: 04fffe5d8eebc11653716e501de755c51f5cd884
   specs:
@@ -85,6 +79,7 @@ GEM
       rack (>= 1.1.0, < 2)
     faraday-stack (0.1.3)
       faraday (~> 0.6)
+    geocoder (1.0.5)
     haml (3.1.3)
     haml-rails (0.3.4)
       actionpack (~> 3.0)
@@ -236,7 +231,7 @@ DEPENDENCIES
   factory_girl_rails
   faraday
   faraday-stack
-  geocoder!
+  geocoder (= 1.0.5)
   haml-rails
   jquery-rails
   json

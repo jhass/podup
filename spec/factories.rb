@@ -13,7 +13,7 @@ FactoryGirl.define do
   factory :pod do
     sequence(:name) {|n| "Pod #{n}" }
     sequence(:url) {|n| "http://pod-#{n}.pods.example.org" }
-    location { Location.first }
+    location
     owner
     
     factory :accepted_pod do

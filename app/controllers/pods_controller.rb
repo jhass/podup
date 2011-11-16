@@ -32,12 +32,15 @@ class PodsController < ApplicationController
       if uri = WebURL.parse(params[:pod][:url])
         if Pod.where(:name => params[:pod][:name]).exists?
           flash[:error] = "Name already used"
-        elsif Pod.where(:url => params[:pod][:url]).exists?
+        elsif Pod.where(:url => uri.to_s).exists?
           flash[:error] = "Pod already submitted"
         else
+          location = Location.from_host(uri.host)
+          if !location || location.code != params[:pod][:location]
+            location = Location.new(:code => params[:pod][:location].downcase)
+          end
           pod = Pod.new(:name => params[:pod][:name], :url => uri.to_s, :location => location,
                       :owner => current_user)
-          location = Location..new(:code => params[:pod][:location].downcase).first
           flash[:notice] = "You'll be notified when your pod is accepted"
           success = true
         end
@@ -49,7 +52,8 @@ class PodsController < ApplicationController
     if success
       redirect_to  pods_path
     else
-      @pod = Pod.new(:name => params[:pod][:name], :url => params[:pod][:url])
+      @pod = Pod.new unless params[:pod]
+      @pod ||= Pod.new(:name => params[:pod][:name], :url => params[:pod][:url])
       render 'pods/new'
     end
   end
