@@ -256,10 +256,10 @@ describe PodsController do
         response.should redirect_to pods_path
       end
       
-      it 'redirects to the new pod form with insufficent params' do
-        post :create, bad_pod_params
+      it 'assigns pod with the found params to redisplay the form with insufficent params' do
+        post :create, bad_pod_params.merge({:pod => {:name => "foo"}})
         
-        response.should redirect_to new_pod_path
+        assigns(:pod).name.should == "foo"
       end
       
       it 'verifies that the name fied is set' do

@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe CountriesController do
   let(:user) { Factory :user }
-  let(:location) { Location.first }
+  let(:location) { Factory :location }
   
   describe  '#index' do
     context 'when user is logged out' do
@@ -34,8 +34,9 @@ describe CountriesController do
     end
     
     it 'gathers all locations from accepted and active pods' do
-      locations = Location.limit(5).all
+      locations = []
       5.times do |n|
+        locations[n] = Factory :location
         Factory :active_pod, :location => locations[n]
       end
       

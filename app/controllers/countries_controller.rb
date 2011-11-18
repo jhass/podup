@@ -48,7 +48,7 @@ class CountriesController < ApplicationController
       host = host.gsub(':/', '://').gsub(":///", "://")
       host = URI.parse(host).host
       respond_to do |format|
-        format.any {
+        format.json {
           if location = Location.from_host(host)
             render :json => location.to_json
           else

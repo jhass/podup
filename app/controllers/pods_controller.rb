@@ -34,13 +34,15 @@ class PodsController < ApplicationController
           flash[:error] = "Name already used"
         elsif Pod.where(:url => uri.to_s).exists?
           flash[:error] = "Pod already submitted"
+        elsif params[:pod][:location].blank? || Country.new(params[:pod][:location].upcase).data.blank?
+          flash[:error] = "The given location is invalid"
         else
           location = Location.from_host(uri.host)
           if !location || location.code != params[:pod][:location]
-            location = Location.new(:code => params[:pod][:location].downcase)
+            location = Location.create(:code => params[:pod][:location].downcase)
           end
-          pod = Pod.new(:name => params[:pod][:name], :url => uri.to_s, :location => location,
-                      :owner => current_user)
+          pod = Pod.create(:name => params[:pod][:name], :url => uri.to_s,
+                           :location => location, :owner => current_user)
           flash[:notice] = "You'll be notified when your pod is accepted"
           success = true
         end
@@ -70,12 +72,17 @@ class PodsController < ApplicationController
             flash[:error] = "Name already submitted"
           elsif params[:pod][:url] != pod.url and Pod.where(:url => params[:pod][:url]).exists?
             flash[:error] = "There's another pod with that URL submitted"
-          elsif location = Location.where(:code => params[:pod][:location].downcase).first
+          elsif params[:pod][:location].blank? || Country.new(params[:pod][:location].upcase).data.blank?
+            flash[:error] = "The given location is invalid"
+          else
             #TODO: resque job, unaccept pod
+            location = Location.from_host(uri.host)
+            if !location || location.code != params[:pod][:location]
+              location = Location.create(:code => params[:pod][:location].downcase)
+            end
+            
             pod.update_attributes(params[:pod].merge(:location => location))
             flash[:notice] = "You'll be notified when the changes are accepted"
-          else
-            flash[:error] = "The given location is invalid"
           end
         else
           flash[:error] = "The given URL is invalid"

@@ -50,21 +50,23 @@ describe UsersController do
       assigns(:user).should == user
     end
     
-    it 'should not assign pods from another user' do
-      pod = Factory :accepted_pod
-      
-      get :show, :id => user.id
-      
-      assigns(:pods).should_not =~ pod
-    end
-    
     context 'for an user with some pods' do
-      it 'should assign accepted pods' do
-        pod = Factory :accepted_pod, :owner => user
+      before do
+        @pod = Factory :accepted_pod, :owner => user
+      end
+      
+      it 'should not assign pods from another user' do
+        pod = Factory :accepted_pod
         
         get :show, :id => user.id
         
-        assigns(:pods).should include pod
+        assigns(:pods).should_not include pod
+      end
+      
+      it 'should assign accepted pods' do
+        get :show, :id => user.id
+        
+        assigns(:pods).should include @pod
       end
       
       it 'should not assing unaccepted pods' do
