@@ -50,7 +50,7 @@ group :development do
   gem 'linecache19', :platforms => :ruby_19
 end
 
-group :test do
+group :test, :development do
   # Specs
   gem 'rspec-rails'
   gem 'factory_girl_rails'
