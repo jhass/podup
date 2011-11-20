@@ -76,10 +76,8 @@ class PodsController < ApplicationController
             flash[:error] = "The given location is invalid"
           else
             #TODO: resque job, unaccept pod
-            location = Location.from_host(uri.host)
-            if !location || location.code != params[:pod][:location]
-              location = Location.create(:code => params[:pod][:location].downcase)
-            end
+            location = Location.from_code(params[:pod][:location])
+            location ||= Location.from_host(uri.host)
             
             pod.update_attributes(params[:pod].merge(:location => location))
             flash[:notice] = "You'll be notified when the changes are accepted"
