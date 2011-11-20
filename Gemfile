@@ -25,6 +25,7 @@ gem 'settingslogic'
 # authentication
 gem 'devise'
 gem 'diaspora-client', :git => 'git://github.com/diaspora/diaspora-client.git'
+gem 'em-synchrony', :platforms => :ruby_19
 
 
 # background processing
