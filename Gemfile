@@ -2,7 +2,7 @@ source 'http://rubygems.org'
 
 
 # standard stuff
-gem 'rails', '~> 3.1.1'
+gem 'rails', '~> 3.1.2'
 gem 'mysql2', '~> 0.3.10'
 gem 'thin'
 gem 'nokogiri'
